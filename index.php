@@ -1,15 +1,13 @@
 <?php
     session_start();
 
-    if(! isset($_SESSION['user'])){
-        echo("<h1>Kindly <a href='./auth/login.php'>login</a> before accessing Admin</h1>");
+    if(empty($_SESSION['success'])){
+        header('location: ./auth/login.php');
     }
     else{
-        $user = $_SESSION['user']; 
-        $pass = $_SESSION['pass'];
-    }
+        $username =  $_SESSION['username'];
+        $firstname =  $_SESSION['fname'];
 ?>
-
     <html lang="en">
         <head>
             <title>Persol | Employees Dashboard</title>
@@ -20,8 +18,6 @@
                 .searchInfo{padding: 0 1%;width:70%;}
             </style>
             <link rel="stylesheet" href="./node_modules/bootstrap.min.css">
-            <link rel="stylesheet" href="./node_modules/datatables.min.css">
-            <link rel="stylesheet" href="./node_modules/dataTables.bootstrap.css">
         </head>
 
         <header>
@@ -31,7 +27,12 @@
                     <a class="navbar-brand" href="#"><img src="./" alt="Persol Anniversary"></a>
                     <div class="collapse row navbar-collapse" id="mainNavbar">
                         <ul class="navbar-nav">
-                    <h1 class="justify-content-center">Welcome <?php print_r($user); ?></h1>
+                    <h1 class="justify-content-center">Welcome <?php if (empty($username)) {
+                        print_r($firstname);
+                    } else {
+                        print_r($username);
+                    }
+                     ?></h1>
                             <li class="col justify-content-end">
                                 <li class="my-2 list-unstyled">
                                     <a href="./auth/logout.php" class="btn btn-info">Sign Out<a/>
@@ -45,10 +46,6 @@
 
     <body>
         <main class="p-5">
-    <?php
-    //     if(! isset($_GET['SearchBtn'])){
-    //             echo(
-    // ?>
                 <form method="GET">
                     <a class="btn btn-success" href="./add.php">Add New Staff</a>
                     <div class="searchInfo">
@@ -80,6 +77,10 @@
                     $count = 1;
                     
                     while($persol_data = mysqli_fetch_array($Data)){
+
+                        // Set session for firstname
+                        $_SESSION['fname'] = $persol_data['firstName'];
+                        
                         echo "<tbody>";
                             echo "<tr class='table-info'>";
                                 echo "<td>".$count++."</td>";
@@ -95,11 +96,7 @@
                         echo "<tbody>";
                     }?>
                 </table>
-<?php
-//  ); }
-// else{
-//     echo(
-?>                   
+                
             <table class="table table-hover">
                 <thead>
                         <tr class='table-dark'>
@@ -108,6 +105,7 @@
                             <th scope="col">Last Name</th>
                             <th scope="col">Email</th>
                             <th>Department</th>
+                            <th>View</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -132,6 +130,7 @@
                                                 <td><?=$data['lastName']; ?></td>
                                                 <td><?=$data['email']; ?></td>
                                                 <td><?=$data['department']; ?></td>
+                                                <td><a href='./more.php?id=$data[id]'>More</td>
                                             </tr>
                                         <?php
                                     }
@@ -143,11 +142,7 @@
                                 <?php } } ?>           
                         </tbody>
                 </table>
-<?php
-//  ); } 
- ?>
         </main>
-            
             <div class="modal fade" id="staticBackdropLive" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLiveLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -207,7 +202,7 @@
                     <div class="col col-md-2"></div>
                     <div style="display:flex; flex-direction:row;" class="col col-md-8">
                         <a href="https://github.com/john-BAPTIS?tab=repositories" target="_blank"><img style="border-radius: 50%; padding:50% 0" width="50px" height=}50ox" src="https://avatars.githubusercontent.com/u/71665600?v=4" alt="Logo"></a>
-                        <p style=" padding:15px 0 15px 10px;">Copyright  © 2023 (Angel Development Team). <strong>Powered by: <a style="text-decoration:none" href="mailto:jamesakweter@gmail.com">Akweter</a></strong></p>
+                        <p style=" padding:15px 0 15px 10px;">Copyright  © 2023 (Persol Development Team). <strong>Powered by: <a style="text-decoration:none" href="mailto:jamesakweter@gmail.com">Akweter</a></strong></p>
                     </div>
                     <div class="col col-md-2"></div>
                 </div>
@@ -215,3 +210,4 @@
         </body>
         <script src="./node_modules/bootstrap.min.js"></script>
     </html>
+    <?php } ?>

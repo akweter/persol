@@ -24,8 +24,9 @@ CREATE TABLE `persol`(
     `digitalAddress`  varchar(125),
     `experienceYears`  varchar(125),
     `experience` varchar(125),
+    `passwd` varchar(125),
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `persol`( `id`, `idNumber`, `idType`, `email`, `firstName`, `lastName`, `mobile`, `residence`, `field`, `date`, `department`, `team`, `staffId`, `bankName`, `bankAccount`, `educationLevel`, `hometown`, `digitalAddress`, `experienceYears`, `experience`) VALUES ('' 45125, 'Ecowas Card', 'james@akweer.mail', 'James', 'Akweter', '0540544762', 'Ablekuma', 'Web Development', '2000-11-25', 'Cybersecurity', 'Rapid Response Team', 's5464r6swex', 'Commercial Bank', '1011452410', 'SHS', 'Juaso', 'GC-098-987', '5', 'yes');
+INSERT INTO `persol`( `id`, `idNumber`, `idType`, `email`, `firstName`, `lastName`, `mobile`, `residence`, `field`, `date`, `department`, `team`, `staffId`, `bankName`, `bankAccount`, `educationLevel`, `hometown`, `digitalAddress`, `experienceYears`, `experience`, `passwd`) VALUES ('', 45125, 'Ecowas Card', 'james@akweer.mail', 'James', 'Akweter', '0540544762', 'Ablekuma', 'Web Development', '2000-11-25', 'Cybersecurity', 'Rapid Response Team', 's5464r6swex', 'Commercial Bank', '1011452410', 'SHS', 'Juaso', 'GC-098-987', '5', 'yes', 'True12');
 

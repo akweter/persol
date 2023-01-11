@@ -28,11 +28,8 @@
         include_once("./Database/config.php");
 
         $Data = mysqli_query($pdo, "INSERT INTO `persol`(`id`, `idNumber`, `idType`, `email`, `firstName`, `lastName`, `mobile`, `residence`, `field`, `date`, `department`, `team`, `staffId`, `bankName`, `bankAccount`, `educationLevel`, `hometown`, `digitalAddress`, `experienceYears`, `experience`) VALUES ('', '$idNumber', '$idType', '$email', '$firstName', '$lastName', '$mobile', '$residence', '$field', '$date', '$department', '$team', '$staffId', '$bankName', '$bankAccount', '$educationLevel', '$hometown', '$GPS', '$experienceYears', '$experienceWorking')");
-
         //Show message when form is filled.
         echo("<script type='text/javascript'>alert('Form recorded successfully.')</script>"); 
-        echo("<h3>View <a href='./index.php'>here</a></h3>");
-        }
     ?>
     
     <!DOCTYPE html>
@@ -75,7 +72,10 @@
         <main class="container mt-5"> 
             <div class="form">
                 <form method="post">
-                    
+    <?php
+        echo("<h3>View <a href='./index.php'>here</a></h3>");
+        }
+    ?>
                     <h3>Personal Information</h3>
                     <div class="form-group">
                         <label class="form-label"  for="firstname">First Name</label>

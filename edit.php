@@ -3,6 +3,38 @@
     //Include database connection file.
     include_once("./Database/config.php");
 
+    //Show selected user based on the chosen in url 
+    $id = $_GET['id'];
+
+    $Data = mysqli_query($pdo, "SELECT * FROM `persol` WHERE id=$id");
+
+    while($Val = mysqli_fetch_array($Data)){
+        $idNumber = $Val['idNumber'];
+        $idType = $Val['idType'];
+        $firstName = $Val['firstName'];
+        $lastName = $Val['lastName'];
+        $residence = $Val['residence'];
+        $GPS = $Val['digitalAddress'];
+        $email = $Val['email'];
+        $mobile = $Val['mobile'];
+        $date = $Val['date'];
+        $field = $Val['field'];
+        $department = $Val['department'];
+        $team = $Val['team'];
+        $staffId = $Val['staffId'];
+        $bankName = $Val['bankName'];
+        $bankAccount = $Val['bankAccount'];
+        $educationLevel = $Val['educationLevel'];
+        $hometown = $Val['hometown'];
+        $experienceWorking = $Val['experience'];
+        $experienceYears = $Val['experienceYears'];
+    }
+?>
+
+<?php
+    //Include database connection file.
+    include_once("./Database/config.php");
+
     //Check if form is submiited for update, then redirect to homepage after update
     if(isset($_POST['update'])){
         
@@ -33,37 +65,7 @@
 
     //Show message when form is filled.
     echo("<script type='text/javascript'>alert('Form updated successfully.')</script>");
-    echo("<h3>View <a href='./index.php'>here</a></h3>");
-    }
-?>
-
-<?php
-    //Show selected user based on the chosen in url 
-    $id = $_GET['id'];
-
-    $Data = mysqli_query($pdo, "SELECT * FROM `persol` WHERE id=$id");
-
-    while($Val = mysqli_fetch_array($Data)){
-        $idNumber = $Val['idNumber'];
-        $idType = $Val['idType'];
-        $firstName = $Val['firstName'];
-        $lastName = $Val['lastName'];
-        $residence = $Val['residence'];
-        $GPS = $Val['digitalAddress'];
-        $email = $Val['email'];
-        $mobile = $Val['mobile'];
-        $date = $Val['date'];
-        $field = $Val['field'];
-        $department = $Val['department'];
-        $team = $Val['team'];
-        $staffId = $Val['staffId'];
-        $bankName = $Val['bankName'];
-        $bankAccount = $Val['bankAccount'];
-        $educationLevel = $Val['educationLevel'];
-        $hometown = $Val['hometown'];
-        $experienceWorking = $Val['experience'];
-        $experienceYears = $Val['experienceYears'];
-    }
+    
 ?>
 
 <!DOCTYPE html>
@@ -101,6 +103,14 @@
             </nav>
         </header>
     <body>
+<?php 
+echo('
+    <h4 class="alert alert-secondary alert-dismissible fade show" role="alert">Click <a href="./" class="alert-link">here</a> and view it.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </h4>
+');
+}
+?>
         <main class="container mt-5">
             <div class="form">
                 <form method="post">
@@ -231,7 +241,7 @@
                     <div class="form-group">
                         <input type="hidden" name="id" value="<?=$_GET['id']; ?>">
                         <input type="submit" name="update" class="btn btn-primary" value="Update">
-                        <a href="./"><input type="reset" name="" class="btn btn-danger" value="Cancel"></a>
+                        <a href="./"><input class="btn btn-danger" value="Cancel"></a>
                     </div>
                 </form>
             </div>
@@ -246,6 +256,7 @@
                 <div class="col col-md-2"></div>
             </div>
         </footer>
+        <script src="./node_modules/bootstrap.min.js"></script>
     </body>
     </html>
     
