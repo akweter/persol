@@ -11,12 +11,13 @@
             echo("<script type='text/javascript'>alert('All fields are required!')</script>"); 
         }
         // Fetch all users from the database
-        $Data = "SELECT * FROM `persol` WHERE email = '$email' AND passwd = '$pass' ";
+        $Data = "SELECT * FROM `signup` WHERE pass = '$pass' AND email = '$email' ";
         $Fetch = mysqli_query($pdo, $Data) or die("Error fetching email and password");
 
         if(mysqli_num_rows($Fetch) > 0){
             $_SESSION['success'] = 'Log in';
             $_SESSION['username'] = $_POST['username'];
+            $_SESSION['verify'] = 'true';
             header('location: ../');
         }
         else{
@@ -57,10 +58,10 @@
                     </div>
                     <div class="modal-body rounded-3  pt-0">
                         <form method="post">
-                            <div class="form-floating mb-3">
+                            <!-- <div class="form-floating mb-3">
                                 <input type="text" class="form-control rounded-3" id="email" name="username" placeholder="johndoe">
                                 <label for="username">Username</label>
-                            </div>
+                            </div> -->
                             <div class="form-floating mb-3">
                                 <input type="email" class="form-control rounded-3" id="email" name="email" placeholder="john.doe@domain.com">
                                 <label for="email">Email</label>

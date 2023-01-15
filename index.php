@@ -3,10 +3,14 @@
 
     if(empty($_SESSION['success'])){
         header('location: ./auth/login.php');
+
+        if (empty($_SESSION['verify'])) {
+            header('location: ./auth/verify.php');
+        }
     }
     else{
         $username =  $_SESSION['username'];
-        $firstname =  $_SESSION['fname'];
+        $firstname =  $_SESSION['firstname'];
 ?>
     <html lang="en">
         <head>
@@ -27,8 +31,8 @@
                     <a class="navbar-brand" href="#"><img src="./" alt="Persol Anniversary"></a>
                     <div class="collapse row navbar-collapse" id="mainNavbar">
                         <ul class="navbar-nav">
-                    <h1 class="justify-content-center">Welcome <?php if (empty($username)) {
-                        print_r($firstname);
+                    <h1 class="justify-content-center">Welcome <?php if (empty($firstname)) {
+                        print_r($username);
                     } else {
                         print_r($username);
                     }
@@ -79,7 +83,7 @@
                     while($persol_data = mysqli_fetch_array($Data)){
 
                         // Set session for firstname
-                        $_SESSION['fname'] = $persol_data['firstName'];
+                        $_SESSION['firstname'] = $persol_data['firstName'];
                         
                         echo "<tbody>";
                             echo "<tr class='table-info'>";

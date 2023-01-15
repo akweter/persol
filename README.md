@@ -1,9 +1,15 @@
-[Class Attendance Form](netlify.com) - No more pen and paper.
+[PHPH CRUD APP](netlify.com)
 ================================
 
-*** The Class Attendance Form made easier for teachers and college class reps to fill in the details of each class held at a particular time.***
+*** This project h.***
 
 ## Getting Started
+
+### Features of this Web App
+1. Login with username or email with password
+2. Sign up page if user has no data with us
+3. Add new employee
+4. Delete, edit, and read more about each employee
 
 ### Installing the web app.
 
