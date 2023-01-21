@@ -45,23 +45,28 @@
                             <?php
                                 if (! isset($_POST['guess'])) {
                                     echo('<h5>Answer cannot be empty</h5>');
-
-                                } elseif (! is_numeric($_POST['guess'])) {
+                                }
+                                elseif (! is_numeric($_POST['guess'])) {
                                     echo('<h5>Your value should be numeric</h5>');
-                                    
-                                } elseif (($_POST['guess']) > 33 || ($_POST['guess'] == 33) ) {
+                                }
+                                elseif (($_POST['guess']) > 33 || ($_POST['guess'] == 33) ) {
                                     echo('<h5>Value should be less than 33</h5>');
-
-                                } elseif (($_POST['guess'] < 30 ) || ($_POST['guess'] == 30) ) {
-                                    echo('<h5>Try answer greater than 30</h5>');
-
+                                }
+                                elseif (($_POST['guess'] < 31 ) || ($_POST['guess'] == 31) ) {
+                                    echo('<h5>Try answer greater than 31</h5>');
                                 }
                                 else {
-                                    echo('<h5>Correct</h5>');
-                                    $_SESSION['success'] = 'Log in';
-                                    $_SESSION['verify'] = 'true';
-                                    header('location: ../');
+                                    if (! isset($_SESSION['verify'])){
+                                        $_SESSION['verify'] = 'verified';
+                                        $_SESSION['login'] = 'true';
+                                    echo("<script type='text/javascript'>alert('Verified')</script>");
+                                    header('location: ../index.php');
+                                    // ($_POST['guess'] == 32 )
+                                    }
                                 }
+                                // else {
+                                //     echo('<h5>Try Again!</h5>');
+                                // }
                             ?>
                         </p>
                     </div>

@@ -114,7 +114,6 @@ echo('
         <main class="container mt-5">
             <div class="form">
                 <form method="post">
-                    
                     <h3>Personal Information</h3>
                     <div class="form-group">
                         <label class="form-label"  for="firstname">First Name</label>

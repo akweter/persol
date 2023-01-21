@@ -14,10 +14,17 @@
         $Data = "SELECT * FROM `signup` WHERE pass = '$pass' AND email = '$email' ";
         $Fetch = mysqli_query($pdo, $Data) or die("Error fetching email and password");
 
+        while($Data = mysqli_fetch_array($Fetch)){
+            $_SESSION['username'] = $Data['username'];
+            $_SESSION['pass'] = $Data['passwd'];
+        }
+
         if(mysqli_num_rows($Fetch) > 0){
-            $_SESSION['success'] = 'Log in';
-            $_SESSION['username'] = $_POST['username'];
-            $_SESSION['verify'] = 'true';
+
+            $_SESSION['username'] = $user;
+            $_SESSION['login'] = 'true';
+            $_SESSION['verify'] = 'verified';
+            
             header('location: ../');
         }
         else{
@@ -52,16 +59,10 @@
             <div class="py-5 modal-dialog">
                 <div class="modal-content p-5 ">
                     <div class="modal-header pb-4 border-bottom-0">
-                        <!-- <h1 class="modal-title fs-5" >Modal title</h1> -->
                         <h1 class="fw-bold mb-0 fs-2">Let's see if you're you</h1>
-                        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                     </div>
                     <div class="modal-body rounded-3  pt-0">
                         <form method="post">
-                            <!-- <div class="form-floating mb-3">
-                                <input type="text" class="form-control rounded-3" id="email" name="username" placeholder="johndoe">
-                                <label for="username">Username</label>
-                            </div> -->
                             <div class="form-floating mb-3">
                                 <input type="email" class="form-control rounded-3" id="email" name="email" placeholder="john.doe@domain.com">
                                 <label for="email">Email</label>

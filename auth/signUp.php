@@ -28,6 +28,9 @@
             $_SESSION['username'] = $_POST['username'];
 
             mysqli_query($pdo, "INSERT INTO `signup`(`email`, `profile`, `pass`, `username`) VALUES ('$eAddress','','$pass','$Username')");
+            
+            $_SESSION['login'] = 'true';
+            $_SESSION['verify'] = 'verified';
 
             echo("<script type='text/javascript'>alert('Sign up successfully')</script>");
             header('location: ./verify.php');
