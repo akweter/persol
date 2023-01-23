@@ -65,7 +65,8 @@
 
     //Show message when form is filled.
     echo("<script type='text/javascript'>alert('Form updated successfully.')</script>");
-    
+    echo("<script type='text/javascript'>alertEdit();</script>");
+    }
 ?>
 
 <!DOCTYPE html>
@@ -103,15 +104,9 @@
             </nav>
         </header>
     <body>
-<?php 
-echo('
-    <h4 class="alert alert-secondary alert-dismissible fade show" role="alert">Click <a href="./" class="alert-link">here</a> and view it.
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </h4>
-');
-}
-?>
+
         <main class="container mt-5">
+            <div id="alert_message"></div>
             <div class="form">
                 <form method="post">
                     <h3>Personal Information</h3>
@@ -255,6 +250,14 @@ echo('
                 <div class="col col-md-2"></div>
             </div>
         </footer>
+        <script>
+            function alertEdit() {
+                document.getElementById('alert_message').innerHTML = newVal;
+                newVal.document.write('Hello');
+                return;
+            }
+            
+        </script>
         <script src="./node_modules/bootstrap.min.js"></script>
     </body>
     </html>

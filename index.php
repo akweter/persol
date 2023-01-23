@@ -8,8 +8,8 @@
         header('location: ./auth/verify.php');
     }
     else{
-        $user = $_SESSION['username']; 
-        $pass = $_SESSION['pass'];
+        // $user = $_SESSION['username']; 
+        // $pass = $_SESSION['pass'];
 ?>
     <html lang="en">
         <head>
@@ -158,9 +158,9 @@
                     <form method="post">
                         <div class="modal-body">
                                 <strong>User Name</strong>
-                                <input type="text" name="changeUser" class="form-control" value="<?=$user; ?>" ><br/>
+                                <input type="text" name="changeUser" class="form-control" value="username" ><br/>
                                 <strong>Password</strong>
-                                <input type="text" name="changePass" class="form-control" value="<?=$pass; ?>" >
+                                <input type="text" name="changePass" class="form-control" value="3u499" >
                         </div>
                         <div class="modal-footer">
                             <input type="submit" class="btn btn-primary" value="Change" name="changeSubmit">
