@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+    if ((empty($_SESSION['login']) || (empty($_SESSION['verify'])))) {
+        header('location: ./auth/login.php');
+    }
+    else {
+        ?> 
 
 <?php
     session_start();
@@ -164,4 +172,4 @@
         <script src="./node_modules/bootstrap/js/bootstrap.min.js"></script>
     </body>
     </html>
-    
+<?php } ?>

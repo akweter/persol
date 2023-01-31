@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+    if ((empty($_SESSION['login']) || (empty($_SESSION['verify'])))) {
+        header('location: ./auth/login.php');
+    }
+    else {
+        ?> 
 
 <?php
     //Include database connection file.
@@ -261,4 +269,4 @@
         <script src="./node_modules/bootstrap.min.js"></script>
     </body>
     </html>
-    
+    <?php } ?>

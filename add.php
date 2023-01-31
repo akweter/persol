@@ -1,3 +1,11 @@
+<?php
+    session_start();
+
+    if ((empty($_SESSION['login']) || (empty($_SESSION['verify'])))) {
+        header('location: ./auth/login.php');
+    }
+    else {
+        ?> 
 
 <?php
     session_start();
@@ -215,4 +223,4 @@
         </footer>
     </body>
     </html>
-    
+<?php } ?>
