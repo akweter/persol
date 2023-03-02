@@ -20,7 +20,9 @@
         <title>Admin Dashboard</title>
         <link rel="stylesheet" href="../node_modules/bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="../node_modules/fontawesome/css/all.min.css">
-        <link rel="stylesheet" href="../node_modules/fontawesome/css/all.css">
+        <style>
+            .card-title,.card-text{color:red;cursor: pointer;}.fa{color:lightgreen;}
+        </style>
     </head>
     <body>
 

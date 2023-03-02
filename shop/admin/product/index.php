@@ -56,6 +56,31 @@
     }
     
 ?>
+<?php
+    if (isset($_POST['create_doc'])) {
+        if (isset($_POST['topic']) && !empty($_POST['topic'])) {
+            $Output = "
+                <h1>".$_POST['topic']."</h2>
+                <p>".nl2br($_POST['content'])."</p>";
+
+            $filename = "Persol-".date("d-m-Y").'.doc';
+
+            header("Cache-Control: ");
+            @header("Pragma: ");
+            header("Expires: 0");
+            header("Content-Type: application/vnd.msword");
+            header("content-disposition: attachment; filename=".$filename);
+
+            echo "<html";
+            echo $Output;
+            echo "</html>";
+        }
+        else {
+            echo "<script>alert('All fields are required!')</script>"; 
+        echo "<script>window.location='index.php'</script>";
+        }
+    }
+?>
 
     <!DOCTYPE html>
     <html lang="en">
@@ -276,14 +301,24 @@
                                     </div>
 
                                     <div class="bg-light pt-md-2 px-md-3 text-center overflow-hidden">
-                                        <div class="my-3 p-3">
-                                            <h2 class="display-5">Another headline</h2>
+                                        <div>
+                                            <h2 class="text-danger">Take NoteS Online</h2>
                                         </div>
                                         <div class="bg-dark shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;">
-                                            <div class="text-white">Bring the Todo here</div>
+                                            <div class="text-white">
+                                                <div class="col-md-12">
+                                                    <form action="" method="post">
+                                                        <h4>Title</h4>
+                                                        <input type="text" name="topic" class="form-control"/>
+                                                        <br/>
+                                                        <h4>Body</h4>
+                                                        <textarea name="content" class="form-control" cols="8" rows="4"></textarea>
+                                                        <button type="submit" name="create_doc" class="btn btn-warning mt-1">Download as Word Doc</button>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
                                 <!--  -->
                                 
