@@ -1,8 +1,55 @@
 <?php
     session_start();
     include_once("../database/config.php");
-    
-    error_reporting(E_WARNING || E_NOTICE || E_ERROR);
+    // error_reporting(E_WARNING || E_NOTICE || E_ERROR);
+
+    // WISHLIST
+    if (isset($_GET['wishlist_btn'])) {
+        $wishlist_product_id = $_GET['wishlist_form_id'];
+        $customer_username =  $_SESSION['cust_username'];
+
+        // ALERT CUSTOMER TO SIGN IN BEFORE ADDING WISHLIST
+        if (empty($_SESSION['cust_login']) || (empty($customer_username))) {
+            $user_signIn = '
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Kindly Login to add wishlist!</strong> <a href="./user_account/login.php" class="btn btn-outline-primary">login</a>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
+        }
+        else {
+            // FETCH PRODUCT NAME  FROM THE PRODUCT DATABASE
+            $fetch_product_name = mysqli_query($PDO, "SELECT * FROM `products` WHERE pid = '$wishlist_product_id'");
+            while($Val = mysqli_fetch_array($fetch_product_name)){
+                $product_name = $Val['P_name'];
+                $product_price = $Val['P_price'];
+                $product_category = $Val['P_category'];
+                $product_image = $Val['P_image'];
+                $product_ID = $Val['pid'];
+                $product_sku = $Val['P_Sku'];
+            }
+            
+            // QUERY WISHLIST DATABASE TO SEE IF THE PRODUCT NAME EXIST IN THE WISHLIST DATABBASE
+            $fetch_cart_name = mysqli_query($PDO, "SELECT * FROM `wishlist` WHERE w_name = '$product_name'");
+            if(mysqli_num_rows($fetch_cart_name) > 0){
+                $wishlist_added_already = '
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">Wishlist already added! <a style="float:right;" class="btn btn-success btn-outline-light" href="./"  aria-label="Close">Okay</a>
+                    </div>
+                ';
+            }
+            else {
+                $insert_products = mysqli_query($PDO, "INSERT INTO `wishlist`(`wid`, `w_name`, `w_price`, `w_category`, `w_image`, `w_username`) VALUES ('','$product_name','$product_price','$product_category','$product_image','$customer_username')");
+                $wishlist_added = '
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">Wishlist added! <a style="float:right;" class="btn btn-warning btn-outline-light" href="./"  aria-label="Close">Okay</a>
+                    </div>
+                ';
+            }
+        }
+    }
+
+    // DISPLAY WISHLIST INFO
+    if (isset($_GET['get_wishlist_value'])) {
+        // Code here
+    }
 
 ?>
 <!DOCTYPE html>
@@ -132,32 +179,23 @@
                             <p class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></p>
                         </a>
                         <button class="navbar-toggler btn btn-outline-light btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#header-nav-bar" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="fa fa-bars fa-lg fa-2x color-light"></span>
+                            <span class="fa fa-bars fa-lg fa-2x color-light">b</span>
                         </button>
                         <div class="collapse navbar-collapse" id="header-nav-bar">
                             <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                                <li><a href="../" class="nav-link text-secondary"><p class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-home fa-2x" aria-hidden="true"></i> </p>Mart</a></li>
+                                <li><a href="#" data-bs-toggle="modal" data-bs-target="#cart_modal" class="nav-link text-white"><p class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-cart-plus fa-2x"></i></p>Cart</a></li>
                                 <li>
-                                    <a href="../" class="nav-link text-secondary"><p class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-home fa-2x" aria-hidden="true"></i> </p>Mart</a>
+                                    <form action="" method="get">
+                                        <input type="hidden" value="<?=$pid?>" name="get_wishlist_value">
+                                        <a type="submit" data-bs-toggle="modal" data-bs-target="#wishlist_modal" class="nav-link text-white">
+                                            <p class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-heart fa-2x"></i></p>Wishlist
+                                        </a>
+                                    </form>
                                 </li>
-                                <li>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#cart_modal" class="nav-link text-white"><p class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-cart-plus fa-2x">2</i></p>Cart</a>
-                                </li>
-                                <li>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#wishlist_modal" class="nav-link text-white"><p class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-heart fa-2x">4</i></p>Wishlist</a>
-                                </li>
-                                <li>
-                                    <a href="../user_account/index.php" class="nav-link text-white">
-                                        <p class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-user-plus fa-2x" aria-hidden="true"></i></p>Account</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link text-white">
-                                        <p data-bs-toggle="modal" data-bs-target="#contact_modal" class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></p>Contact</a>
-                                </li>
-                                <li>
-                                    <a href="../user_account/login.php" class="nav-link text-white">
-                                        <p class="bi d-block mx-auto" width="24" height="24"><i class="fa fa-sign-in fa-3x" aria-hidden="true"></i></p>
-                                    </a>
-                                </li>
+                                <li><a href="../user_account/index.php" class="nav-link text-white"><p class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-user-plus fa-2x" aria-hidden="true"></i></p>Account</a></li>
+                                <li><a href="#" class="nav-link text-white"><p data-bs-toggle="modal" data-bs-target="#contact_modal" class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></p>Contact</a></li>
+                                <li><a href="../user_account/login.php" class="nav-link text-white"><p class="bi d-block mx-auto" width="24" height="24"><i class="fa fa-sign-in fa-3x" aria-hidden="true"></i></p></a></li>
                             </ul>
                         </div>
                     </div>
@@ -187,20 +225,10 @@
                     <div class="col col-md-6">
                         <h3 class="amazing_deals fw-bold fs-1 bg-danger text-light">Amazing Deals Are Here</h3>
                     </div>
-                    <!--- <div class="p-5">
-                        <div class="jumbotrom_page-two">
-                            <div class="try-body">
-                                <div id="first-one"></div>
-                                <div id="second-one">
-                                    <div id="second-of-second"></div>
-                                </div>
-                                <div id="third-one"><a class=" text-light btn btn-info btn-outline-danger btn-lg mt-1" href="https://jamesakweter.online/projects" target="_balnk">My Projects</a></div>
-                                <div id="fourth-one"></div>
-                                <div id="fifth-one"><a class="btn btn-warning btn-outline-dark btn-lg mt-1" href="mailto:jamesakweter@gmail.com">Contact Me</a></div>
-                            </div>
-                         </div>
-                    </div> -->
                 </div>
+            </div>
+            <div class="container">
+                <?php if (isset($user_signIn)) { echo($user_signIn); } if (isset($wishlist_added)) {echo($wishlist_added); } if (isset($wishlist_added_already)) {echo($wishlist_added_already);} ?>
             </div>
 
             <!-- block two -->
@@ -275,17 +303,32 @@
                             <div class="row row-cols-2 p-0 row-cols-sm-2 row-cols-md-4">
                             <?php
                                 $Fetch = mysqli_query($PDO, "SELECT * FROM `products` ORDER BY `P_Sku` ASC") or die("Error fetching products");
-                                while($query = mysqli_fetch_array($Fetch)){ ?>
+                                while($query = mysqli_fetch_array($Fetch)){ 
+                                    $pid = $query['pid'];
+                                    $p_name = $query['P_name'];
+                                    $p_SKU = $query['P_Sku'];
+                                    $p_price = $query['P_price'];
+                                    $p_category = $query['P_category'];
+                                    $p_image = $query['P_image'];
+                                    $p_details = $query['P_detail'];
+                                    $p_unit = $query['P_unit'];
+                                    $p_stock = $query['P_qty'];
+                                    ?>
                                     <div class="col mb-4">
                                         <div class="card shadow-sm">
-                                            <a href="./shop/view.php?view=<?=$query['pid'];?>"><img class="bd-placeholder-img card-img-top" src="../public/img/<?php echo $query['P_image'] ?>" width="300" height="150" alt="<?php echo $query['P_name'] ?>"></a>
+                                            <a href="./shop/view.php?view=<?=$pid?>"><img class="bd-placeholder-img card-img-top" src="../public/img/<?=$p_image?>" width="300" height="150" alt="<?=$p_image?>"></a>
                                             <div class="card-body">
-                                                <p class="card-text"><strong><?php echo $query['P_name'] ?>
-                                                    <i class="badge bg-danger">¢<?php echo $query['P_price'] ?></i></strong></p>
+                                                <p class="card-text"><strong><?=$p_name?>
+                                                    <i class="badge bg-danger">¢<?=$p_price?></i></strong></p>
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="btn-group">
-                                                        <a class="text-decoration-none" href="./shop/view.php?view=<?=$query['pid'];?>"><button type="button" class="btn btn-light btn-sm btn-outline-success"><i class="fa fa-eye fa-lg"></i></button></a>
-                                                        <a href="./shop/edit.php?edit=<?=$query['pid'];?>" id="view_product"><button type="button" class="btn btn-light btn-sm btn-outline-warning"><i class="fa fa-cart-plus" aria-hidden="true"></i></button></a>
+                                                        <a class="text-decoration-none"  title="Quick View" href="./shop/view.php?view=<?=$pid?>"><button type="button" class="btn btn-light btn-sm btn-outline-success"><i class="fa fa-eye fa-lg"></i></button></a>
+                                                        <a href="./shop/checkout/index.php?checkoutID=<?=$query['pid']?>" title="Add to cart" id="view_product"><button type="submit" class="btn btn-light btn-sm btn-outline-warning"><i class="fa fa-cart-plus" aria-hidden="true"></i></button></a>
+                                                        <form action="" method="get">
+                                                            <button type="submit" name="wishlist_btn" title="Add to wishlist" class="btn btn-light btn-sm btn-outline-danger">
+                                                                <i class="fa fa-heart fa-lg"></i></button></a>
+                                                                <input type="hidden" name="wishlist_form_id" value="<?=$pid?>">
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -319,37 +362,39 @@
             </div>
         </div>
 
-        <!-- WISHLIAT MODAL -->
+        <!-- WISHLIST MODAL -->
         <div class="modal fade" id="wishlist_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="wishlist_modalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="wishlist_modalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>I will not close if you click outside me. Don't even try to press escape key.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Understood</button>
-                </div>
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="wishlist_modalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>I will not close if you click outside me. Don't even try to press escape key.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Understood</button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- CONTACT MODAL -->
-        <div class="modal-dialog contact_modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-4" id="contact_modal">Full screen modal</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <div class="modal fade" id="contact_modal" data-bs-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-4" id="contact_modal">Full screen modal</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>

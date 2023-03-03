@@ -28,11 +28,25 @@
     }
     
     // CHECKOUT
-    if (isset($_POST['add_basket'])) {
+    if (isset($_POST['add_basket']) && (! empty($_POST['user_cart_selection']))) {
         $cart_session_value = $_POST['user_cart_selection'];
         $_SESSION['cartValue'] = $cart_session_value;
     }
-    
+    else {
+        $message = '
+        <div style="width:50%;" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Basket cannot be empty!</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+        </div>';
+    }
+
+    // WISHLIST
+    if (isset($_GET['wishlist_btn'])) {
+        $wishlist_product = $_GET['wishlist_btn'];
+        // Require the user to sign before adding the wishlist value to the wishlist database with the username unique and ID primary key
+        // First check if the product doese not exist in the database before adding the wishlist product
+        // If product exist, then update it instead. Do not alert the user that it exist, just update it since products keep updating
+    }
 ?>
 
 <!DOCTYPE html>
@@ -132,9 +146,9 @@
                                                         <div style="display:flex;flex-direction:row;" class="row">
                                                             <div class="row">
                                                                 <button class="btn btn-danger" onclick="reduceSelection();" style="width:15%;"><i class="fa fa-minus-circle fa-lg"></i></button>
-                                                                <input style="margin-right:10px;margin-left:10px;width:20%;text-align:center;border:1px solid skyblue;" class="form-control" type="number" value="<?=$cart_value?>" id="user_cart_selection" name="user_cart_selection" id="">
+                                                                <input style="margin-right:10px;margin-left:10px;width:20%;text-align:center;border:1px solid skyblue;" class="form-control" type="number" value="" name="user_cart_selection" id="user_cart_selection">
                                                                 <button class="btn btn-success" onclick="addSelection();" style="width:15%;margin-right:10px;"><i class="fa fa-plus-circle fa-lg"></i></button>
-                                                                <a style="width:30%;" href="./checkout/index.php?checkoutID=<?=$pid?>" name="add_basket" class="text-decoration-none btn btn-sm btn-light btn-outline-primary">Add To Basket</a>
+                                                                <form action="" method="post"><a type="submit" style="width:30%;" href="./checkout/index.php?checkoutID=<?=$pid?>" name="add_basket" class="text-decoration-none btn btn-sm btn-light btn-outline-primary">Add To Basket</a></form>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -143,6 +157,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?$cart_session_value?>
                                 <div class="row mb-3">
                                     <h2>Related Products</h2>
                                     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5">
@@ -153,13 +168,13 @@
                                                 <div class="card shadow-sm">
                                                     <a href="./view.php?view=<?=$query['pid'];?>"><img class="bd-placeholder-img card-img-top fluid img-fluid" src="../../public/img/<?=$query['P_image'] ?>" alt="<?php echo $query['P_name'] ?>"></a>
                                                     <div class="card-body">
-                                                        <p class="card-text"><strong><?=$query['P_name'] ?></strong></p>
+                                                        <p class="card-text"><strong><?=$query['P_name'] ?></strong> <i class="badge bg-danger">¢<?=$query['P_price'] ?></i></p>
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <div class="btn-group">
                                                                 <a class="text-decoration-none" href="./view.php?view=<?=$query['pid'];?>"><button type="button" class="btn btn-light btn-outline-success"><i class="fa fa-eye fa-lg"></i></button></a>
-                                                                <a href="./edit.php?edit=<?=$query['pid'];?>" id="view_product"><button type="button" class="btn btn-light btn-outline-primary"><i class="fa fa-cart-plus" aria-hidden="true"></i></button></a>
+                                                                <a href="./checkout/index.php?checkoutID=<?=$query['pid'];?>" id="view_product"><button type="button" class="btn btn-light btn-outline-primary"><i class="fa fa-cart-plus" aria-hidden="true"></i></button></a>
+                                                                <form action="" method="get"><button type="submit" name="wishlist_btn" class="btn btn-light btn-sm btn-outline-primary"><i class="fa fa-wishlist fa-lg">w</i></button></a></form>
                                                             </div>
-                                                            <h1 class="badge bg-danger">¢<?=$query['P_price'] ?></h1>
                                                         </div>
                                                     </div>
 
@@ -239,6 +254,18 @@
             </footer>
         </div>
 
+        <script>
+            function reduceSelection(){
+                alert("reduce selection");
+            }
+
+            function addSelection(){
+                alert("add selection");
+                // var cart_value = document.getElementByName('user_cart_selection').val;
+                // cart_value = 0;
+                // cart_value++;
+            }
+        </script>
         <script src="../../node_modules/bootstrap/bootstrap.min.js"></script>
     </body>
 </html>

@@ -9,7 +9,7 @@
             $customer_pass = $_POST['passd'];
             $customer_email = $_POST['email'];
 
-            if ($_POST['pass'] == '' || $_POST['email'] == '') {
+            if (empty($_POST['pass']) || ($_POST['email'])) {
                 $message = '
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>All fields are required!</strong>
@@ -21,21 +21,29 @@
             $Fetch = mysqli_query($PDO, $Data) or die("Error fetching email and password");
 
             while($query = mysqli_fetch_array($Fetch)){
+
                 $cust_username = $query['Username'];
-                $_SESSION['cust_sign_up'] = 'true';
                 $_SESSION['cust_username'] = $cust_username;
+
+                $_SESSION['cust_sign_up'] = 'true';
                 $_SESSION['cust_login'] = 'true';
                 $_SESSION['status'] = $query['Status'];
             }
 
             if(mysqli_num_rows($Fetch) > 0){
 
-                $cust_username = $query['Username'];
-                $_SESSION['cust_sign_up'] = 'true';
                 $_SESSION['cust_username'] = $cust_username;
+
+                $_SESSION['cust_sign_up'] = 'true';
                 $_SESSION['cust_login'] = 'true';
                 $_SESSION['status'] = $query['Status'];
-                header('location: ../');
+
+                $login_success = '
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Login Successful</strong><a href="../" class="btn btn-outline-primary">Go Dashboard</a>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+                // header('location: ../');
             }
             else{
                 $message = '
@@ -46,7 +54,6 @@
             }
         }
     ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -104,6 +111,7 @@
                 <img class="mb-4" src="../../public/img/wheat.jpg" alt="" width="72" height="57">
                 <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
                 <?php if (isset($message)) { echo($message); } ?>
+                <?php if (isset($login_success)) {echo($login_success); } ?>
                 <div class="form-floating">
                     <input type="email" class="form-control" required id="floatingInput" name="email" placeholder="someone@domain.com">
                     <label for="floatingInput">Email address</label>

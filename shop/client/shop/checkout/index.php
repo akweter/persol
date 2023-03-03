@@ -1,48 +1,76 @@
-<!-- Editing Modal -->
-<?php
+
+  <?php
     // error_reporting(E_WARNING || E_NOTICE || E_ERROR);
+    
+    session_start();
+    include_once("../../../database/config.php");
 
-        session_start();
-        include_once("../../../database/config.php");
-            if (isset($_GET['checkoutID'])) {
-                $checkout_id = $_GET['checkoutID'];
-                $customer_cart_value = $_SESSION['cartValue'];
+    // GRAB CHECKOUT VALUE FROM THE SESSION
+    if (isset($_SESSION['cartValue'])) {
+      $customer_cart_value = $_SESSION['cartValue'];
+    }
+    else {
+      $message = '
+        <div style="width:50%;" class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>No cart value found</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+        </div>';
+    }
 
-                $fetch_arrays = mysqli_query($PDO, "SELECT * FROM `products` WHERE pid = '$checkout_id'");
-                while($Val = mysqli_fetch_array($fetch_arrays)){
-                    $new_name = $Val['P_name'];
-                    $new_SKU = $Val['P_Sku'];
-                    $new_price = $Val['P_price'];
-                    $new_category = $Val['P_category'];
-                    $new_image = $Val['P_image'];
-                    $new_details = $Val['P_detail'];
-                    $new_unit = $Val['P_unit'];
-                    $new_stock = $Val['P_qty'];
-                }
-              }else {
-                header('location:../../');
-              }
+    // COMPARE CHECKOUT ID TO THE ONE IN DATABASE
+    if (isset($_GET['checkoutID'])) {
+      $checkout_id = $_GET['checkoutID'];
+      
+      $fetch_arrays = mysqli_query($PDO, "SELECT * FROM `products` WHERE pid = '$checkout_id'");
+      while($Val = mysqli_fetch_array($fetch_arrays)){
+        $new_pid = $Val['pid'];
+        $new_name = $Val['P_name'];
+        $new_SKU = $Val['P_Sku'];
+        $new_price = $Val['P_price'];
+        $new_category = $Val['P_category'];
+        $new_image = $Val['P_image'];
+        $new_details = $Val['P_detail'];
+        $new_unit = $Val['P_unit'];
+        $new_stock = $Val['P_qty'];
+      }
+    }
+    else { $else_for_checkout_id = "<strong class='text-danger'>No value found for checkoutID!</strong>"; //header('location:../../'); 
+    }
 
-                if (! empty(isset($_SESSION['cust_username']))) {
-                  $cus_username = $_SESSION['cust_username'];
+    // FETCH USER INFORMATION TO COMPLETE THE CHECOUT
+    if (! empty(isset($_SESSION['cust_username']))) {
+      $cus_username = $_SESSION['cust_username'];
 
-                  $customer_username = mysqli_query($PDO, "SELECT * FROM `customers` WHERE Username = '$cus_username'");
-                  while($Val = mysqli_fetch_array($customer_username)){
-                    $cus_fname = $Val['C_fn'];
-                    $cus_lname = $Val['C_ln']; 
-                    $cus_country = $Val['C_country'];
-                    $cus_city = $Val['C_city'];
-                    $cus_town = $Val['C_town'];
-                    $cus_gps = $Val['C_GPS'];
-                    $cus_image = $Val['C_image'];
-                    $cus_email = $Val['email_Add'];
-                    $cus_phone = $Val['Telephone'];
-                    $cus_status = $Val['Status'];
-                  }
-                }
-            
-        ?>
-        
+      $customer_username = mysqli_query($PDO, "SELECT * FROM `customers` WHERE Username = '$cus_username'");
+      while($Val = mysqli_fetch_array($customer_username)){
+        $cus_fname = $Val['C_fn'];
+        $cus_lname = $Val['C_ln']; 
+        $cus_country = $Val['C_country'];
+        $cus_city = $Val['C_city'];
+        $cus_town = $Val['C_town'];
+        $cus_gps = $Val['C_GPS'];
+        $cus_image = $Val['C_image'];
+        $cus_email = $Val['email_Add'];
+        $cus_phone = $Val['Telephone'];
+        $cus_status = $Val['Status'];
+      }
+    }
+
+    // DELETE CHECKOUT PRODUCT
+    if(isset($_GET['delete_checkout_product'])){
+      $delete_product_id = $checkout_id;
+
+      $Erase = mysqli_query($PDO, "DELETE FROM `products` WHERE pid = $delete_product_id");
+      unlink('../../public/img/'.$Erase['image']);
+
+      $Erase = mysqli_query($PDO, "DELETE FROM `cart` WHERE cid = $delete_product_id");
+
+      $Erase = mysqli_query($PDO, "DELETE FROM `wishlist` WHERE wid = $delete_product_id");
+
+      header("location: ../../");
+  }
+  ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -67,7 +95,7 @@
                             <p class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></p>
                         </a>
                         <button class="navbar-toggler btn btn-outline-light btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#header-nav-bar" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="fa fa-bars fa-lg fa-2x color-light"></span>
+                            <span class="fa fa-bars fa-lg fa-2x color-light"></span>b
                         </button>
                         <div class="collapse navbar-collapse" id="header-nav-bar">
                             <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
@@ -75,7 +103,9 @@
                                     <a href="../" class="nav-link text-secondary"><p class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-home fa-2x" aria-hidden="true"></i> </p>Mart</a>
                                 </li>
                                 <li>
-                                    <a href="#" class="nav-link text-white"><p class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-cart-plus fa-2x"></i></p>Cart</a>
+                                    <a href="#" class="nav-link text-white"><p class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-cart-plus fa-2x"></i>
+                                      <?php if (isset($_SESSION['cartValue'])) {
+                                        echo($customer_cart_value); };?></p>Cart</a>
                                 </li>
                                 <li>
                                     <a href="#" class="nav-link text-white"><p class="bi d-block mx-auto mb-1" width="24" height="24"><i class="fa fa-heart fa-2x"></i></p>Wishlist</a>
@@ -117,15 +147,46 @@
         
       <div class="container">
         <main>
+          <?php if (isset($checkout_id_for)) {
+            echo($checkout_id_for);
+          } ?>
+          <?php if (isset($else_for_checkout_id)) {
+            echo($else_for_checkout_id);
+          } ?>
           <div class="py-5 text-center">
-            <h1>Dispay cart info here<?php print_r($cus_username); ?></h1>
+            <table class="table table-hover">
+              <thead>
+                <tr class="table-dark">
+                  <th colspan="3" scope="col">Product</th>
+                  <th scope="col">Price GH¢</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><form action="" method="get"><button type="submit" name="delete_checkout_product" class="btn btn-outline-danger">X</button></td><input type="hidden"></form>
+                  <td> <img width="40" height="40" src="../../../public/img/<?=$new_image?>" alt="<?=$new_name?>"></td>
+                  <td><?=$new_name?></td>
+                  <td>¢ <?=$new_price?>.00</td>
+                  <td><input style="width:15%;" type="text" name="checkout_qty" value="1" id=""></td>
+                  <td>¢ <?=$new_price*1; ?>.00</td>
+                </tr>
+              </tbody>
+              <div class="row border">
+                <td colspan="2"><input type="text" name="coupon_redeem" placeholder="Coupon Code" class="form-control" id=""></td>
+                <td><input class="btn btn-outline-success form-control" type="submit" value="Apply Coupon"></td>
+                <td><button class="btn btn-outline-primary form-control"> Update Basket</button></td>
+                <td><h4>Total</h4></td>
+                <td><h5>¢ 4581.00</h5></td>
+              </div>
+            </table>
           </div>
 
           <div class="row g-5">
             <div class="col-md-5 col-lg-4 order-md-last">
               <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-primary">Your cart</span>
-                <span class="badge bg-primary rounded-pill">s<?=$customer_cart_value?></span>
+                <span class="text-primary">Your cart</span><span class="badge bg-primary rounded-pill">s</span>
               </h4>
               <ul class="list-group mb-3">
                 <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -134,20 +195,6 @@
                     <small class="text-muted">Brief description</small>
                   </div>
                   <span class="text-muted">$12</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between lh-sm">
-                  <div>
-                    <h6 class="my-0">Second product</h6>
-                    <small class="text-muted">Brief description</small>
-                  </div>
-                  <span class="text-muted">$8</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between lh-sm">
-                  <div>
-                    <h6 class="my-0">Third item</h6>
-                    <small class="text-muted">Brief description</small>
-                  </div>
-                  <span class="text-muted">$5</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between bg-light">
                   <div class="text-success">
@@ -175,7 +222,7 @@
                 <div class="row g-3">
                   <div class="col-sm-6">
                     <label for="firstName" class="form-label">First name</label>
-                    <input type="text" class="form-control" id="firstName" value="<?=$cus_fname?>" placeholder="<?=$cus_fname?>" value="" required>
+                    <input type="text" class="form-control" id="firstName" value="" placeholder="" value="" required>
                     <div class="invalid-feedback">
                       Valid first name is required.
                     </div>

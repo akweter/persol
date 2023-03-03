@@ -40,3 +40,6 @@
 1. Design media files for dashboard
 2. Design todo for the products
 3. B
+
+<!-- FOR CART ORDER VALUE -->
+$_SESSION['cartValue'] = $cart_session_value;
