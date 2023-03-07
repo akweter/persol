@@ -1,15 +1,12 @@
 <?php
     session_start();
+    include_once("../../database/config.php");
 
     if ((! empty($_SESSION['admin_login']) || (! empty($_SESSION['admin_sign_up'])))) {
         header('location: ../dashboard.php');
     }
     else {
-        ?> 
-
-    <?php
-        include_once("../../database/config.php");
-
+        
         if(isset($_POST['signin'])){
             $pass = $_POST['pass'];
             $email = $_POST['email'];
@@ -22,19 +19,20 @@
             $Fetch = mysqli_query($PDO, $Data) or die("Error fetching email and password");
 
             while($Data = mysqli_fetch_array($Fetch)){
+                $username = $Data['Username'];
+                $status = $Data['Status'];
 
-                $username = $Data['Cust_Username'];
-                
-                $_SESSION['admin'] = 'true';
-
+                $_SESSION['admin'] = $status;
+                $_SESSION['admin_login'] = 'true';
                 $_SESSION['admin_sign_up'] = 'true';
                 $_SESSION['admin_username'] = $username;
             }
 
             if(mysqli_num_rows($Fetch) > 0){
-
                 $_SESSION['admin_sign_up'] = 'true';
                 $_SESSION['admin_login'] = 'true';
+                $_SESSION['admin_username'] = $username;
+                $_SESSION['admin'] = $status;
                 
                 header('location: ../');
             }
@@ -56,6 +54,17 @@
             <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
             <title>Admin Login</title>
             <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
+            <style>
+                body{
+                    margin: 0 20%;
+                    background: gray;
+                }
+                div.modal-dialog{
+                    margin: 2% 0;
+                    background: white;
+                    border-radius: 20% 5% 15% 10%;
+                }
+            </style>
         </head>
         <body>
                 <div class="py-5 modal-dialog">
@@ -66,11 +75,11 @@
                         <div class="modal-body rounded-3  pt-0">
                             <form method="post">
                                 <div class="form-floating mb-3">
-                                    <input type="email" class="form-control rounded-3" id="email" name="email" placeholder="john.doe@domain.com">
+                                    <input required type="email" class="form-control rounded-3" id="email" name="email" placeholder="john.doe@domain.com">
                                     <label for="email">Email</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="password" name="pass" class="form-control rounded-3" id="pass" placeholder="Password">
+                                    <input required type="password" name="pass" class="form-control rounded-3" id="pass" placeholder="Password">
                                     <label for="pass">Password</label>
                                 </div>
                                 <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" name="signin" type="submit">Log in</button>

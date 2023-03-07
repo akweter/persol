@@ -1,10 +1,17 @@
 <?php
-    // session_start();
-    // $admin_session =  $_SESSION['admin_sign_up'];
+    error_reporting(E_WARNING || E_NOTICE || E_ERROR);
+    session_start();
 
-    // if (empty($admin_session)) {
-    //     header('location: ./auth/login.php');
-    // }
+    include_once("../../database/config.php");
+
+    $admin_signup =  $_SESSION['admin_sign_up'];
+    $admin_login = $_SESSION['admin_login'];
+    $admin_username = $_SESSION['admin_username'];
+    $status = $_SESSION['admin'];
+
+    if (empty($admin_login) || empty($admin_signup)) {
+        header('location: ../../auth/login.php');
+    }
 ?>
 
     <!DOCTYPE html>
@@ -16,7 +23,8 @@
         <meta name="description" content="Supermarket Management Software">
         <meta name="author" content="James Akweter">
         <meta name="generator" content="Angel Dev Team">
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" sizes="180x180" href="../../public/img/glass.webp">
+        <link rel="apple-touch-icon" sizes="180x180" href="../public/img/glass.webp">
         <title>Admin Dashboard</title>
         <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="../../node_modules/fontawesome/css/all.min.css">
@@ -29,8 +37,8 @@
             <div class="px-3 py-2 bg-info">
                 <div class="container">
                     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                        <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-                            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+                    <a href="./" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><img src="../../public/img/wheat.jpg" width="50" height="50" alt="logo" srcset=""></svg><h1 style="margin-left:50px;">Welcome <?php if (isset($admin_username)) {echo($admin_username);}?> <i class="badge bg-danger"><?php if (isset($status)) {echo($status);} ?></i></h1>
                         </a>
                         <ul class="nav p-3 col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                             <li>
@@ -113,183 +121,57 @@
                 </nav>
 
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <div class="album py-5 bg-light">
-                        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-6 g-3">
-                            <div class="col">
-                                <div class="card shadow-sm">
-                                <img class="bd-placeholder-img card-img-top" src="../../public/img/rose.png" alt="insulation">
-                                    <div class="card-body">
-                                        <p class="card-text">Insulation</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-primary">View</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger">Edit</button>
-                                            </div>
-                                            <small class="text-muted">GHS: 1</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card shadow-sm">
-                                <img class="bd-placeholder-img card-img-top" src="../../public/img/rose.png" alt="insulation">
-                                    <div class="card-body">
-                                        <p class="card-text">Insulation</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-primary">View</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger">Edit</button>
-                                            </div>
-                                            <small class="text-muted">GHS: 1</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card shadow-sm">
-                                <img class="bd-placeholder-img card-img-top" src="../../public/img/rose.png" alt="insulation">
-                                    <div class="card-body">
-                                        <p class="card-text">Insulation</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-primary">View</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger">Edit</button>
-                                            </div>
-                                            <small class="text-muted">GHS: 1</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card shadow-sm">
-                                <img class="bd-placeholder-img card-img-top" src="../../public/img/rose.png" alt="insulation">
-                                    <div class="card-body">
-                                        <p class="card-text">Insulation</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-primary">View</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger">Edit</button>
-                                            </div>
-                                            <small class="text-muted">GHS: 1</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="card shadow-sm">
-                                    <img class="bd-placeholder-img card-img-top" src="../../public/img/rose.png" alt="insulation">
-                                    <div class="card-body">
-                                        <p class="card-text">Insulation</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-primary">View</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger">Edit</button>
-                                            </div>
-                                            <small class="text-muted">GHS: 1</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card shadow-sm">
-                                <img class="bd-placeholder-img card-img-top" src="../../public/img/rose.png" alt="insulation">
-                                    <div class="card-body">
-                                        <p class="card-text">FIberglass</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-primary">View</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger">Edit</button>
-                                            </div>
-                                            <small class="text-muted">GHS: 1</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card shadow-sm">
-                                <img class="bd-placeholder-img card-img-top" src="../../public/img/rose.png" alt="insulation">
-                                    <div class="card-body">
-                                        <p class="card-text">Insulation</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-primary">View</button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger">Edit</button>
-                                            </div>
-                                            <small class="text-muted">GHS: 1</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="fa fa-twitter fa-lg"></div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="table-dark">
+                                <th scope="col">#</th>
+                                <th scope="col">Order ID</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Product ID</th>
+                                <th scope="col">QTY</th>
+                                <th scope="col">Subtotal</th>
+                                <th scope="col">Total Price</th>
+                                <th scope="col">Payment Mode</th>
+                                <th scope="col">Order Time</th>
+                                <th scope="col">Order Date</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                            <?php
+                                $Fetch = mysqli_query($PDO, "SELECT * FROM `orders` ORDER BY o_date ASC") or die("Error fetching products");
+                                $num = 1;
+                                while($query = mysqli_fetch_array($Fetch)){ ?>
+                        <tbody>
+                            <tr>
+                                <td><?=$num++ ?></td>
+                                <td><?=$query['o_orderID'] ?></td>
+                                <td><?=$query['o_username'] ?></td>
+                                <td><?=$query['o_product_id'] ?></td>
+                                <td><?=$query['o_qty']?></td>
+                                <td><?=$query['o_subtotal']?></td>
+                                <td><?=$query['o_total_payment'] ?></td>
+                                <td><?=$query['o_paymentMode'] ?></td>
+                                <td><?=$query['o_time']?></td>
+                                <td><?=$query['o_date']?></td>
+                                <td><?=$query['status']?></td>
+                                <td class="text-danger"><a href="./edit_order.php?editUser=<?=$query['C_id'];?>"><i class="fa fa-edit fa-lg"></i>Edit</a> | <a onclick="return confirm('This operation is risky. Are you sure to delete?');" href="./order_crud.php?eraseUser=<?=$query['pid'];?>"><i class="fa fa-times fa-lg"></i>Delete</a> | <a href='./order_crud.php?moreDetails=<?=$query['pid'];?>'><i class="fa fa-search fa-lg"></i>View</a></td>
+                            </tr>
+                        </tbody>
+                            <?php } ?>
+                    </table>
                 </main>
                 
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="bg-info">
-            <footer class="container py-5">
-                <div class="row">
-                <div class="col-6 col-md-2 mb-3">
-                    <h5>Section</h5>
-                    <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-6 col-md-2 mb-3">
-                    <h5>Section</h5>
-                    <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-6 col-md-2 mb-3">
-                    <h5>Section</h5>
-                    <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-md-5 offset-md-1 mb-3">
-                    <form>
-                    <h5>Subscribe to our newsletter</h5>
-                    <p>Monthly digest of what's new and exciting from us.</p>
-                    <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                        <label for="newsletter1" class="visually-hidden">Email address</label>
-                        <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
-                        <button class="btn btn-primary" type="button">Subscribe</button>
-                    </div>
-                    </form>
-                </div>
-                </div>
-
-                <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
-                <p>&copy; 2023 Company, Inc. All rights reserved.</p>
-                <ul class="list-unstyled d-flex">
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
-                </ul>
+         <!-- Footer -->
+         <div class="bg-info">
+            <footer class="py-4 container">
+                <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top"><p>&copy; <?php echo(date("Y")); ?> Angel Dev Team. All rights reserved.</p>
                 </div>
             </footer>
-            </div>
-        <script src="../../node_modules/bootstrap/bootstrap.min.js"></script>
+        </div>
         <script src="../../node_modules\fontawesome\js\fontawesome.min.js"></script>
         <script src="../../node_modules\fontawesome\js\all.min.js"></script>
     </body>

@@ -1,5 +1,16 @@
 <?php
-session_start();
+    error_reporting(E_WARNING || E_NOTICE || E_ERROR);
+    session_start();
+
+    $admin_signup =  $_SESSION['admin_sign_up'];
+    $admin_login = $_SESSION['admin_login'];
+    $admin_username = $_SESSION['admin_username'];
+    $status = $_SESSION['admin'];
+
+    if (empty($admin_login) || empty($admin_signup)) {
+        header('location: ../auth/login.php');
+    }
+
     // DELETE DATA
     include_once("../../database/config.php");
     if(isset($_GET['erase'])){
@@ -46,7 +57,8 @@ session_start();
         <meta name="description" content="Supermarket Management Software">
         <meta name="author" content="James Akweter">
         <meta name="generator" content="Angel Dev Team">
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" sizes="180x180" href="../../public/img/glass.webp">
+        <link rel="apple-touch-icon" sizes="180x180" href="../../public/img/glass.webp">
         <title>Admin | Online Market</title>
         <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -67,7 +79,7 @@ session_start();
                     <div class="row">
                         <div class="col-sm-12 col-md-4"><img src="../../public/img/<?=$new_image?>" class="fluid img-fluid" alt="image"></div>
                         <div class="col col-md-8">
-                            <h3> Datasheet</h3>
+                            <h3> Product Description</h3>
                             <form method="post">
                                 <p class="card-text"><?=$new_details?>.</p>
                                 <h3>Category: <i class="text-danger"><?=$new_category?></i></h3>
@@ -81,24 +93,21 @@ session_start();
                                 </div> -->
                             </form>
                         </div>
+                        <a href="./edit.php?edit=<?=$pid?>" class="btn btn-success"><i class="fa fa-edit fa-lg"></i>Edit</a>
+                        <a onclick="return confirm('This operation is risky. Are you sure to delete?');" href="./action.php?erase=<?=$pid?>"  class="btn btn-danger"><i class="fa fa-times fa-lg"></i>Delete</a>
                     </div>
                 </div>
             </div>
         </main>
-    <!-- Footer -->
-    <div class="bg-info py-3">
-        <footer class="container py-5">
-            <div class="row">
-                <div class="d-flex flex-column flex-sm-row justify-content-between py-4 border-top">
-                <p>&copy; <?php echo date("Y"); ?> Angel Dev Team. All rights reserved.</p>
-                <ul class="list-unstyled d-flex">
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
-                </ul>
+        <!-- Footer -->
+        <div class="bg-info">
+                <footer class="py-4 container">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+                        <p>&copy; <?php echo(date("Y")); ?> Angel Dev Team. All rights reserved.</p>
+                    </div>
+                </footer>
             </div>
-        </footer>
-    </div>
+        </div>
         <script src="../../node_modules/bootstrap/bootstrap.min.js"></script>
     </body>
 </html>

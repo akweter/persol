@@ -1,3 +1,7 @@
+<?php
+    // Allow one admin to delete admin
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>

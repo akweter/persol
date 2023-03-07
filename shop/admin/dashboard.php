@@ -1,10 +1,40 @@
 <?php
+    error_reporting(E_WARNING || E_NOTICE || E_ERROR);
     session_start();
-    $admin_session =  $_SESSION['admin_sign_up'];
+    include_once("../database/config.php");
 
-    if (empty($admin_session)) {
+    $admin_signup =  $_SESSION['admin_sign_up'];
+    $admin_login = $_SESSION['admin_login'];
+    $admin_username = $_SESSION['admin_username'];
+    $status = $_SESSION['admin'];
+
+    if (empty($admin_login) || empty($admin_signup)) {
         header('location: ./auth/login.php');
     }
+
+        // COUNT USERS FROM CUSTOMERS DB
+        $total_customers = "SELECT * FROM `customers` ORDER BY C_id ASC";
+        $fetch_arrays = mysqli_query($PDO, $total_customers);
+        $customers = mysqli_num_rows($fetch_arrays);
+
+        // COUNT USERS FROM ADMIN DB
+        $total_admins = "SELECT * FROM `admin_users` ORDER BY Admin_id ASC";
+        $fetch_arrays = mysqli_query($PDO, $total_admins);
+        $admins = mysqli_num_rows($fetch_arrays);
+
+        // TOTAL USERS
+        $total_users = $customers+$admins;
+        
+        // TOTAL PRODUCT QTY 
+        $orders = "SELECT * FROM `orders` ";
+        $fetch = mysqli_query($PDO, $orders);
+        $process_order_qty = mysqli_num_rows($fetch);
+        
+        // TOTAL PRODUCT QTY
+        $_cat = "SELECT P_name FROM `products` ";
+        $fetch = mysqli_query($PDO, $_cat);
+        $all_products = mysqli_num_rows($fetch);
+    
 ?>
 
     <!DOCTYPE html>
@@ -16,7 +46,8 @@
         <meta name="description" content="Supermarket Management Software">
         <meta name="author" content="James Akweter">
         <meta name="generator" content="Angel Dev Team">
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" sizes="180x180" href="../public/img/glass.webp">
+        <link rel="apple-touch-icon" sizes="180x180" href="../public/img/glass.webp">
         <title>Admin Dashboard</title>
         <link rel="stylesheet" href="../node_modules/bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="../node_modules/fontawesome/css/all.min.css">
@@ -26,13 +57,13 @@
     </head>
     <body>
 
-        <!-- Header -->
+        <!-- Header admin_username-->
         <header>
             <div class="px-3 py-2 bg-info">
                 <div class="container">
                     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                        <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-                            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+                        <a href="./" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><img src="../public/img/wheat.jpg" width="50" height="50" alt="logo" srcset=""></svg><h1 style="margin-left:50px;">Welcome <?php if (isset($admin_username)) {echo($admin_username);}?> <i class="badge bg-danger"><?php if (isset($status)) {echo($status);} ?></i></h1>
                         </a>
                         <ul class="nav p-3 col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                             <li>
@@ -106,7 +137,6 @@
 
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                     <div class="album py-2">
-                        
                         <div class="album py-4 mb-4">
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
                                 <div class="col">
@@ -117,8 +147,8 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">2</h5>
-                                                    <p class="card-text">Users</p>
+                                                    <p class="card-text">Active Users</p>
+                                                    <h5 class="card-title"><?=$total_users?></h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -132,8 +162,8 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">12</h5>
-                                                    <p class="card-text">Categories</p>
+                                                    <p class="card-text">All Categories</p>
+                                                    <h5 class="card-title">9</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -147,8 +177,8 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">9</h5>
-                                                    <p class="card-text">Products</p>
+                                                    <p class="card-text">Total Products</p>
+                                                    <h5 class="card-title"><?=$all_products?></h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -162,8 +192,8 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">GHS: 5232</h5>
-                                                    <p class="card-text">Orders</p>
+                                                    <p class="card-text">Processed Orders</p>
+                                                    <h5 class="card-title"><?=$process_order_qty?></h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -174,49 +204,48 @@
                         <div class="album">
                             <div class="row row-cols-1 row-cols-sm-1 row-cols-md-3 g-3">
                                 <div class="col col-md-5">
-                                    <h4 class="">Top Products</h4>
+                                    New Thing
+                                </div>
+                                <div class="col col-md-7">
+                                    <h4 class="">Pending Orders</h4>
                                     <table class=" table table-striped">
                                         <thead class="thead">
-                                            <tr>
-                                                <td>Title</td><td>Total Sold</td><td>Total QTY</td>
+                                            <tr class="table-dark">
+                                                <td>#</td><td>Product Name</td><td>Date</td><td>Status</td><td>Total Sale</td>
                                             </tr>
                                         </thead>
                                         <tbody class="tbody">
+                                            <?php
+                                                $Fetch = mysqli_query($PDO, "SELECT * FROM `orders` WHERE status = 'Pending' ") or die("Error fetching products");
+                                                $count = 1; 
+                                                
+                                                if (mysqli_num_rows($Fetch)> 0) {
+                                                    foreach ($Fetch as $query) {
+                                                        $oid = $query['o_orderID'];
+                                                        $o_pid = $query['o_product_id'];
+                                                        $oDate = $query['o_date'];
+                                                        $oStatus = $query['status'];
+                                                        $oSales = $query['o_total_payment'];?>
+
+                                                        <?php 
+                                                        $product_fetch = "SELECT * FROM `products` WHERE pid = '$o_pid'";
+                                                        $fetch_arrays = mysqli_query($PDO, $product_fetch);
+                                                        while($Val = mysqli_fetch_array($fetch_arrays)){
+                                                            $product_name = $Val['P_name'];
+                                                        }?>
                                             <tr>
-                                                <td>Cement</td><td>50</td><td>542</td>
+                                                <td><?=$count++?></td>
+                                                <td><?=$product_name?></td>
+                                                <td><?=$oDate?></td>
+                                                <td><?=$oStatus?></td>
+                                                <td>¢<?=$oSales?>.00</td>
                                             </tr>
+                                                    <?php }
+                                                }
+
+                                                ?>
                                         </tbody>
                                     </table>
-                                </div>
-                                <div class="col col-md-5">
-                                    <h4 class="">New Orders</h4>
-                                    <table class=" table table-striped">
-                                        <thead class="thead">
-                                            <tr>
-                                                <td>#</td><td>Product Name</td><td>Date</td><td>Total Sale</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="tbody">
-                                            <tr>
-                                                <td>2</td><td>ODE</td><td>2023/02/23</td><td>GHS: 242</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col col-md-2">
-                                    <div class="card rounded-3 shadow-sm">
-                                        <div class="card-header">
-                                            <h4 class="my-0 fw-normal">Checklists</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <ul class="list-unstyled">
-                                                <li>10 active users</li>
-                                                <li>2 GB of storage</li>
-                                                <li>Email support</li>
-                                                <li>Help center access</li>
-                                            </ul>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -229,16 +258,10 @@
         <!-- Footer -->
         <div class="bg-info">
             <footer class="py-4 container">
-                <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
-                    <p>&copy; 2023 Company, Inc. All rights reserved.</p>
-                    <ul class="list-unstyled d-flex">
-                        <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-                        <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-                        <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
-                    </ul>
+                <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top"><p>&copy; <?php echo(date("Y")); ?> Angel Dev Team. All rights reserved.</p>
                 </div>
             </footer>
-            </div>
+        </div>
         <script src="../node_modules/bootstrap/bootstrap.min.js"></script>
        </body>
 </html>

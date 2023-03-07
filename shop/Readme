@@ -43,3 +43,5 @@
 
 <!-- FOR CART ORDER VALUE -->
 $_SESSION['cartValue'] = $cart_session_value;
+
+<!-- CHECKOIUT -->

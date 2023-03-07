@@ -1,10 +1,78 @@
 <?php
-    // session_start();
-    // $admin_session =  $_SESSION['admin_sign_up'];
+    error_reporting(E_WARNING || E_NOTICE || E_ERROR);
+    session_start();
 
-    // if (empty($admin_session)) {
-    //     header('location: ./auth/login.php');
-    // }
+    include_once("../../database/config.php");
+    
+    $admin_signup =  $_SESSION['admin_sign_up'];
+    $admin_login = $_SESSION['admin_login'];
+    $admin_username = $_SESSION['admin_username'];
+    $status = $_SESSION['admin'];
+
+    if (empty($admin_login) || empty($admin_signup)) {
+        header('location: ../auth/login.php');
+    }
+
+        $cement_cat = "SELECT SUM(P_qty) FROM `products` WHERE P_category = 'Cement'";
+        $fetch_arrays = mysqli_query($PDO, $cement_cat);
+        while($Val = mysqli_fetch_array($fetch_arrays)){
+            $Cement_stock = $Val['SUM(P_qty)'];
+        }
+
+        $Rope_cat = "SELECT SUM(P_qty) FROM `products` WHERE P_category = 'Rope'";
+        $fetch_arrays = mysqli_query($PDO, $Rope_cat);
+        while($Val = mysqli_fetch_array($fetch_arrays)){
+            $Rope_stock = $Val['SUM(P_qty)'];
+        }
+
+        $Insulation_cat = "SELECT SUM(P_qty) FROM `products` WHERE P_category = 'Insulation'";
+        $fetch_arrays = mysqli_query($PDO, $Insulation_cat);
+        while($Val = mysqli_fetch_array($fetch_arrays)){
+            $Insulation_stock = $Val['SUM(P_qty)'];
+        }
+
+        $Armaflex_cat = "SELECT SUM(P_qty) FROM `products` WHERE P_category = 'Armaflex'";
+        $fetch_arrays = mysqli_query($PDO, $Armaflex_cat);
+        while($Val = mysqli_fetch_array($fetch_arrays)){
+            $Armaflex_stock = $Val['SUM(P_qty)'];
+        }
+
+        $Roofing_cat = "SELECT SUM(P_qty) FROM `products` WHERE P_category = 'Roofing'";
+        $fetch_arrays = mysqli_query($PDO, $Roofing_cat);
+        while($Val = mysqli_fetch_array($fetch_arrays)){
+            $Roofing_stock = $Val['SUM(P_qty)'];
+        }
+
+        $Expandable_cat = "SELECT SUM(P_qty) FROM `products` WHERE P_category = 'Expandable'";
+        $fetch_arrays = mysqli_query($PDO, $Expandable_cat);
+        while($Val = mysqli_fetch_array($fetch_arrays)){
+            $Expandable_stock = $Val['SUM(P_qty)'];
+        }
+
+        $Donwproofing_cat = "SELECT SUM(P_qty) FROM `products` WHERE P_category = 'Donwproofing'";
+        $fetch_arrays = mysqli_query($PDO, $Donwproofing_cat);
+        while($Val = mysqli_fetch_array($fetch_arrays)){
+            $Donwproofing_stock = $Val['SUM(P_qty)'];
+        }
+
+        $Wooden_cat = "SELECT SUM(P_qty) FROM `products` WHERE P_category = 'Wooden'";
+        $fetch_arrays = mysqli_query($PDO, $Wooden_cat);
+        while($Val = mysqli_fetch_array($fetch_arrays)){
+            $Wooden_stock = $Val['SUM(P_qty)'];
+        }
+
+        $Plumbing_cat = "SELECT SUM(P_qty) FROM `products` WHERE P_category = 'Plumbing'";
+        $fetch_arrays = mysqli_query($PDO, $Plumbing_cat);
+        while($Val = mysqli_fetch_array($fetch_arrays)){
+            $Plumbing_stock = $Val['SUM(P_qty)'];
+        }
+
+        $Cladding_cat = "SELECT SUM(P_qty) FROM `products` WHERE P_category = 'Cladding'";
+        $fetch_arrays = mysqli_query($PDO, $Cladding_cat);
+        while($Val = mysqli_fetch_array($fetch_arrays)){
+            $Cladding_stock = $Val['SUM(P_qty)'];
+        }
+   
 ?>
 
     <!DOCTYPE html>
@@ -16,7 +84,8 @@
         <meta name="description" content="Supermarket Management Software">
         <meta name="author" content="James Akweter">
         <meta name="generator" content="Angel Dev Team">
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" sizes="180x180" href="../../public/img/glass.webp">
+        <link rel="apple-touch-icon" sizes="180x180" href="../../public/img/glass.webp">
         <title>Admin Dashboard</title>
         <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="../../node_modules/fontawesome/css/all.min.css">
@@ -29,8 +98,8 @@
             <div class="px-3 py-2 text-bg-info">
                 <div class="container">
                     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                        <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-                            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+                    <a href="./" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><img src="../../public/img/wheat.jpg" width="50" height="50" alt="logo" srcset=""></svg><h1 style="margin-left:50px;">Welcome <?php if (isset($admin_username)) {echo($admin_username);}?> <i class="badge bg-danger"><?php if (isset($status)) {echo($status);} ?></i></h1>
                         </a>
                         <ul class="nav p-3 col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                             <li>
@@ -58,7 +127,7 @@
                     </form>
 
                     <div class="btn-toolbar mb-2 mb-md-0">
-                        <h1>Stock</h1>
+                        <h1>Available Stock</h1>
                     </div>
                 </div>
             </div>
@@ -76,9 +145,9 @@
                             <li class="nav-item">
                                 <button class="nav-link btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">Stock</button>                                   <div class="collapse show" id="home-collapse">
                                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                    <li><a href="#" class="nav-link text-danger d-inline-flex text-decoration-none rounded">St 1</a></li>
+                                    <!-- <li><a href="#" class="nav-link text-danger d-inline-flex text-decoration-none rounded">St 1</a></li>
                                     <li><a href="#" class="nav-link text-danger d-inline-flex text-decoration-none rounded">St 2</a></li>
-                                    <li><a href="#" class="nav-link text-danger d-inline-flex text-decoration-none rounded">St 3</a></li>
+                                    <li><a href="#" class="nav-link text-danger d-inline-flex text-decoration-none rounded">St 3</a></li> -->
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -108,9 +177,27 @@
                 </nav>
 
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <div class="album py-2">
-                        Stock here
-                    </div>
+                    <div class="col px-4 pb-3">
+                                    <table class=" table table-striped">
+                                        <thead class="thead">
+                                            <tr class="table-dark">
+                                                <td>PRODUCTS</td><td>QTY</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="tbody">
+                                            <tr><td>Cement</td><td><?=$Cement_stock?></td></tr>
+                                            <tr><td>Rope</td><td><?=$Rope_stock?></td></tr>
+                                            <tr><td>Insulation</td><td><?=$Insulation_stock?></td></tr>
+                                            <tr><td>Roofing</td><td><?=$Roofing_stock?></td></tr>
+                                            <tr><td>Armaflex</td><td><?=$Armaflex_stock?></td></tr>
+                                            <tr><td>Donwproofing</td><td><?=$Donwproofing_stock?></td></tr>
+                                            <tr><td>Expandable</td><td><?=$Expandable_stock?></td></tr>
+                                            <tr><td>Wooden</td><td><?=$Wooden_stock?></td></tr>
+                                            <tr><td>Plumbing</td><td><?=$Plumbing_stock?></td></tr>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                 </main>
                 
             </div>
@@ -118,64 +205,13 @@
 
         <!-- Footer -->
         <div class="bg-info">
-            <footer class="container py-5">
-                <div class="row">
-                <div class="col-6 col-md-2 mb-3">
-                    <h5>Section</h5>
-                    <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-6 col-md-2 mb-3">
-                    <h5>Section</h5>
-                    <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-6 col-md-2 mb-3">
-                    <h5>Section</h5>
-                    <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-md-5 offset-md-1 mb-3">
-                    <form>
-                    <h5>Subscribe to our newsletter</h5>
-                    <p>Monthly digest of what's new and exciting from us.</p>
-                    <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                        <label for="newsletter1" class="visually-hidden">Email address</label>
-                        <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
-                        <button class="btn btn-primary" type="button">Subscribe</button>
+                <footer class="py-4 container">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+                        <p>&copy; <?php echo(date("Y")); ?> Angel Dev Team. All rights reserved.</p>
                     </div>
-                    </form>
-                </div>
-                </div>
-
-                <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
-                <p>&copy; 2023 Company, Inc. All rights reserved.</p>
-                <ul class="list-unstyled d-flex">
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
-                </ul>
-                </div>
-            </footer>
+                </footer>
             </div>
+        </div>
         <script src="../../node_modules/bootstrap/bootstrap.min.js"></script>
         <script src="../../node_modules\fontawesome\js\fontawesome.min.js"></script>
         <script src="../../node_modules\fontawesome\js\all.min.js"></script>

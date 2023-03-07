@@ -9,13 +9,6 @@
             $customer_pass = $_POST['passd'];
             $customer_email = $_POST['email'];
 
-            if (empty($_POST['pass']) || ($_POST['email'])) {
-                $message = '
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>All fields are required!</strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>';
-            }
             // Fetch all users from the database
             $Data = "SELECT * FROM `customers` WHERE PassWD = '$customer_pass' AND email_Add = '$customer_email' ";
             $Fetch = mysqli_query($PDO, $Data) or die("Error fetching email and password");
@@ -24,7 +17,6 @@
 
                 $cust_username = $query['Username'];
                 $_SESSION['cust_username'] = $cust_username;
-
                 $_SESSION['cust_sign_up'] = 'true';
                 $_SESSION['cust_login'] = 'true';
                 $_SESSION['status'] = $query['Status'];
@@ -33,14 +25,13 @@
             if(mysqli_num_rows($Fetch) > 0){
 
                 $_SESSION['cust_username'] = $cust_username;
-
                 $_SESSION['cust_sign_up'] = 'true';
                 $_SESSION['cust_login'] = 'true';
                 $_SESSION['status'] = $query['Status'];
 
                 $login_success = '
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Login Successful</strong><a href="../" class="btn btn-outline-primary">Go Dashboard</a>
+                        <strong>Login Successful</strong><a href="../" class="btn btn-outline-primary">Lets Start Shopping</a>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>';
                 // header('location: ../');
@@ -53,6 +44,13 @@
                     </div>';
             }
         }
+        // if (empty($_POST['pass']) || ($_POST['email'])) {
+        //     $message = '
+        //         <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        //             <strong>All fields are required!</strong>
+        //             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        //         </div>';
+        // }
     ?>
 
 <!DOCTYPE html>
@@ -73,6 +71,8 @@
             body {
                 height: 100%;
             }
+
+            main{width: 60%;;}
 
             body {
                 display: flex;
@@ -106,7 +106,7 @@
         </style>
     </head>
     <body class="text-center">
-        <main class="form-signin w-100 m-auto bg-light">
+        <main class="form-signin m-auto bg-light">
             <form method="post">
                 <img class="mb-4" src="../../public/img/wheat.jpg" alt="" width="72" height="57">
                 <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
@@ -131,7 +131,7 @@
                     <label><input type="checkbox" value="remember-me"> Remember me</label>
                 </div>
                 <button class="w-100 btn btn-lg btn-primary" name="signin" type="submit">Sign in</button>
-                <a href="./signup.php" class="text-decoration-none"><button class="btn btn-sm btn-warning mt-2" type="submit">Sign up</button></a>
+                <a href="./signup.php" class="btn btn-sm btn-warning mt-2">Sign up</a>
                 <p class="mt-5 mb-3 text-muted">&copy; <?php echo date("Y");?> - #1 Largest Online Market</p>
             </form>
         </main>

@@ -102,17 +102,18 @@
             </div>
             <div class="px-3 py-2 border-bottom bg-dark">
                 <div class="container">
-                    <form class="row" role="search">
-                        <div style="display:flex;flex-direction:row;">
-                            <div style="width:95%; margin-right:1%;">
-                                <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                <div class="row">
+                        <form action="../../search/index.php" method="post">
+                            <div style="display:flex;flex-direction:row;">
+                                <div style="width:95%; margin-right:1%;">
+                                    <input type="search" class="form-control" name="q" placeholder="I am looking for..." aria-label="Search">
+                                </div>
+                                <div>
+                                    <a type="submit" href=""><button class="btn btn-outline-light btn-warning" type="submit"><i class="fa  fa-search fa-lg"></i></button></a>
+                                </div>
                             </div>
-                            <div>
-                                <a type="submit" href=""><button class="btn btn-outline-light btn-warning" type="submit"><i class="fa  fa-search fa-lg"></i></button></a>
-                            </div>
-                        </div>
-                        
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </header>

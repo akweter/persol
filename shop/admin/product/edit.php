@@ -1,7 +1,17 @@
 <!-- Editing Modal -->
-        <?php
-        session_start();
+    <?php
         error_reporting(E_WARNING || E_NOTICE || E_ERROR);
+        session_start();
+        
+        $admin_signup =  $_SESSION['admin_sign_up'];
+        $admin_login = $_SESSION['admin_login'];
+        $admin_username = $_SESSION['admin_username'];
+        $status = $_SESSION['admin'];
+
+        if (empty($admin_login) || empty($admin_signup)) {
+            header('location: ../auth/login.php');
+        }
+    
 
         include_once("../../database/config.php");
             if (isset($_GET['edit'])) {
@@ -60,8 +70,8 @@
                     
                 }
                 $message = '
-                <div style="width:50%;" class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Product uploaded successfully</strong>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Product updated successfully!</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>';
             }
@@ -76,7 +86,8 @@
         <meta name="description" content="Supermarket Management Software">
         <meta name="author" content="James Akweter">
         <meta name="generator" content="Angel Dev Team">
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" sizes="180x180" href="../../public/img/glass.webp">
+        <link rel="apple-touch-icon" sizes="180x180" href="../../public/img/glass.webp">
         <title>Edit Products</title>
         <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="../../node_modules/fontawesome/css/all.min.css">
@@ -88,8 +99,9 @@
         <header>
             <div class="bg-info">
                 <div class="container p-3">
-                    <a href="./" class="btn btn-lg btn-warning" style="float:right;">Go Back</a>
-                    <h1>Edit Product</h1>
+                    <a href="./" class="btn btn-lg btn-primary" style="float:right;margin-left:10px;">Dashboard</a>
+                    <a href="./action.php?more=<?=$product_ID?>" class="btn btn-lg btn-warning" style="float:right;">Go Back</a>
+                    <h1 class="text-danger">Editing <k class="text-success"><?php if (isset($new_name)) {echo($new_name);}else{echo('Product');} ?></k></h1>
                 </div>
             </div>
         </header>
@@ -164,18 +176,13 @@
                     
         <!-- Footer -->
         <div class="bg-info">
-            <footer class="container py-5">
-                <div class="row">
-                <div class="d-flex flex-column flex-sm-row justify-content-between border-top">
-                <p>&copy; <?php echo date("Y"); ?> Angel Dev Team. All rights reserved.</p>
-                <ul class="list-unstyled d-flex">
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
-                </ul>
-                </div>
-            </footer>
+                <footer class="py-4 container">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+                        <p>&copy; <?php echo(date("Y")); ?> Angel Dev Team. All rights reserved.</p>
+                    </div>
+                </footer>
             </div>
+        </div>
         <script src="../../node_modules/bootstrap/bootstrap.min.js"></script>
     </body>
 </html>

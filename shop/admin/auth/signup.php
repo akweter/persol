@@ -34,10 +34,11 @@
                 echo("<script type='text/javascript'>alert('Username or Email already exist')</script>");
             }
             else{
+                $_SESSION['admin'] = 'Admin';
                 $_SESSION['admin_login'] = 'true';
                 $_SESSION['admin_sign_up'] = 'true';
-                $_SESSION['admin_username'] = $Username;
-
+                $_SESSION['admin_username'] = $username;
+                
                 mysqli_query($PDO, "INSERT INTO `admin_users`(`Admin_id`, `email_Add`, `Logo`, `Username`, `Status`, `PassWD`) VALUES ('', '$eAddress', '$avatar', '$Username', '$status', '$PassWd')");
 
                 echo("<script type='text/javascript'>alert('Sign up successfully')</script>");
@@ -58,9 +59,20 @@
             <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
             <title>Admin Sign Up</title>
             <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
+            <style>
+                body{
+                    background: gray;
+                    margin: 0 20%;
+                }
+                div.modal-dialog{
+                    background: white;
+                    margin: 2% 0;
+                    border-radius: 10% 20% 5% 2%;
+                }
+            </style>
         </head>
         <body>
-            <div class="py-5 modal-dialog">
+            <div class="modal-dialog">
                 <div class="modal-content p-3 ">
                     <div class="modal-header pb-4 border-bottom-0">
                         <h1 class="fw-bold mb-0 fs-2 offset-2">Sign up for free</h1>
@@ -68,18 +80,18 @@
                     <div class="modal-body rounded-3  pt-0">
                             <form method="post">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control rounded-3" id="username" name="username" placeholder="John1">
+                                    <input required type="text" class="form-control rounded-3" id="username" name="username" placeholder="John1">
                                     <label for="username">Username</label>
                                 <div class="form-floating mb-3">
-                                    <input type="email" class="form-control rounded-3" id="email" name="email" placeholder="john.doe@domain.com">
+                                    <input required type="email" class="form-control rounded-3" id="email" name="email" placeholder="john.doe@domain.com">
                                     <label for="email">Email</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="password" name="pass1" class="form-control rounded-3" id="pass1" placeholder="Password">
+                                    <input required type="password" name="pass1" class="form-control rounded-3" id="pass1" placeholder="Password">
                                     <label for="pass1">Password</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="password" name="pass2" class="form-control rounded-3" id="pass2" placeholder="Comfirm Password">
+                                    <input required type="password" name="pass2" class="form-control rounded-3" id="pass2" placeholder="Comfirm Password">
                                     <label for="pass2">Comfirm Password</label>
                                 </div>
                                 <div class="form-floating mb-3">
