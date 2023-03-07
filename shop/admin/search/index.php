@@ -55,8 +55,8 @@
                 <?php
                     include_once("../../database/config.php");
 
-                    if(isset($_SERVER['sp'])){
-                        $filter = $_GET['p-q'];
+                    if(isset($_POST['product'])){
+                        $filter = $_POST['product'];
                         $scan = "SELECT * FROM `products` WHERE CONCAT(P_name,P_detail,P_category,P_price) LIKE '%$filter%' ";
                         $scan_run = mysqli_query($PDO, $scan);
 

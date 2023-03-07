@@ -142,9 +142,8 @@
             </div>
             <div class="px-3 bg-light py-2 border-bottom mb-3">
                 <div class="container d-flex flex-wrap justify-content-center">
-                    <form action="../search/index.php?p-q=<?php $query;?>" method="POST" class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
-                    <?php if (isset($_POST['p-q'])) { $query = $_POST['p-q']; } ?>
-                        <input type="search" name="p-q" class="form-control" placeholder="I am looking for..." aria-label="Search">
+                    <form action="../search/index.php" method="POST" class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
+                        <input type="search" name="product" class="form-control" placeholder="I am looking for..." aria-label="Search">
                     </form>
 
                     <div class="btn-toolbar mb-2 mb-md-0">
@@ -229,12 +228,12 @@
                                     <tbody>
                                         <tr>
                                             <td><?php echo $num++ ?></td>
-                                            <td><?php echo $query['P_name'] ?></td>
+                                            <td><a style="text-decoration:none;" href='./action.php?more=<?=$query['pid'];?>'><?php echo $query['P_name'] ?></a></td>
                                             <td>¢ <?php echo $query['P_price'] ?>.00</td>
                                             <td><?php echo $query['P_category'] ?></td>
                                             <td><?php echo $query['P_qty'].' '.$query['P_unit'] ?>s </td>
-                                            <td> <img width="40" height="40" src="../../public/img/<?php echo $query['P_image'] ?>" alt="<?php echo $query['P_name'] ?>"></td>
-                                            <td class="text-danger"><a href="./edit.php?edit=<?=$query['pid'];?>"><i class="fa fa-edit fa-lg"></i>Edit</a> | <a onclick="return confirm('This operation is risky. Are you sure to delete?');" href="./action.php?erase=<?=$query['pid'];?>"><i class="fa fa-times fa-lg"></i>Delete</a> | <a href='./action.php?more=<?=$query['pid'];?>'><i class="fa fa-search fa-lg"></i>View</a></td>
+                                            <td><a href='./action.php?more=<?=$query['pid'];?>'><img width="40" height="40" src="../../public/img/<?php echo $query['P_image'] ?>" alt="<?php echo $query['P_name'] ?>"></a></td>
+                                            <td class="text-danger"><a href="./edit.php?edit=<?=$query['pid'];?>"><i class="fa fa-edit fa-lg"></i>Edit</a> | <a onclick="return confirm('This operation is risky. Are you sure to delete?');" href="./action.php?erase=<?=$query['pid'];?>"><i class="fa fa-times fa-lg"></i>Delete</a></td>
                                         </tr>
                                     </tbody>
                                     <?php } ?>
