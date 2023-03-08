@@ -1,10 +1,10 @@
 <?php
     session_start();
 
-    if ((! empty($_SESSION['admin_login']) || (! empty($_SESSION['admin_sign_up'])))) {
-        header('location: ../dashboard.php');
-    }
-    else {
+    // if ((! empty($_SESSION['admin_login']) || (! empty($_SESSION['admin_sign_up'])))) {
+    //     header('location: ../dashboard.php');
+    // }
+    // else {
         ?> 
 
     <?php
@@ -12,37 +12,52 @@
 
         if(isset($_POST['Signup'])){
 
-            if (($_POST['pass1']) != ($_POST['pass2'])) {
-                echo("<script type='text/javascript'>alert('Passwords do not match')</script>");
+            if( empty($_POST['username']) || empty($_POST['email']) || empty($_POST['pass1']) ) {
+                $fields_required = '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <h4>All fields are required!</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
             }
-
-            elseif( empty($_POST['username']) || empty($_POST['email']) || empty($_POST['pass1']) ) {
-                echo("<script type='text/javascript'>alert('All fields are required!')</script>");
+            elseif (($_POST['pass1']) !== ($_POST['pass2'])) {
+                $wrong_input = '
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <h4>Passwords do not match</h4
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
             }
+            else {
+                $eAddress = htmlspecialchars($_POST['email']);
+                $Username = htmlspecialchars($_POST['username']);
+                $PassWd = htmlspecialchars($_POST['pass1']);
+                $status = htmlspecialchars($_POST['admin_status']);
+                $avatar = htmlspecialchars($_POST['avatar']);
 
-            $eAddress = htmlspecialchars($_POST['email']);
-            $Username = htmlspecialchars($_POST['username']);
-            $PassWd = htmlspecialchars($_POST['pass1']);
-            $status = htmlspecialchars($_POST['admin_status']);
-            $avatar = htmlspecialchars($_POST['avatar']);
+                // Comaparing user info to the one in the database
+                $Data = "SELECT * FROM `admin_users` WHERE Username = '$Username' OR email_Add = '$eAddress' ";
+                $Query = mysqli_query($PDO, $Data) or die("Error fetching email and password");
 
-            // Comaparing user info to the one in the database
-            $Data = "SELECT * FROM `admin_users` WHERE Username = '$Username' OR email_Add = '$eAddress' ";
-            $Query = mysqli_query($PDO, $Data) or die("Error fetching email and password");
+                if(mysqli_num_rows($Query) > 0){
+                    $user_exists = '
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <h4>Username or Email exists!</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+                }
+                else{
+                    // $_SESSION['admin'] = 'Admin';
+                    // $_SESSION['admin_login'] = 'true';
+                    // $_SESSION['admin_sign_up'] = 'true';
+                    // $_SESSION['admin_username'] = $Username;
+                    
+                    mysqli_query($PDO, "INSERT INTO `admin_users`(`Admin_id`, `email_Add`, `Logo`, `Username`, `Status`, `PassWD`) VALUES ('', '$eAddress', '$avatar', '$Username', 'Admin', '$PassWd')");
 
-            if(mysqli_num_rows($Query) > 0){
-                echo("<script type='text/javascript'>alert('Username or Email already exist')</script>");
-            }
-            else{
-                $_SESSION['admin'] = 'Admin';
-                $_SESSION['admin_login'] = 'true';
-                $_SESSION['admin_sign_up'] = 'true';
-                $_SESSION['admin_username'] = $username;
-                
-                mysqli_query($PDO, "INSERT INTO `admin_users`(`Admin_id`, `email_Add`, `Logo`, `Username`, `Status`, `PassWD`) VALUES ('', '$eAddress', '$avatar', '$Username', '$status', '$PassWd')");
-
-                echo("<script type='text/javascript'>alert('Sign up successfully')</script>");
-                header('location: ./login.php');
+                    $user_added = '
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <h4>You are added sucessfully</h4><a href="./login.php" class="btn btn-warning">Sign In</a>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+                }
             }
         }
     ?>
@@ -78,6 +93,7 @@
                         <h1 class="fw-bold mb-0 fs-2 offset-2">Sign up for free</h1>
                     </div>
                     <div class="modal-body rounded-3  pt-0">
+                        <?php if (isset($user_added)) {echo($user_added);} if (isset($user_exists)) {echo($user_exists);} if (isset($wrong_input)) {echo($wrong_input);} if (isset($fields_required)) {echo($fields_required);} ?>
                             <form method="post">
                                 <div class="form-floating mb-3">
                                     <input required type="text" class="form-control rounded-3" id="username" name="username" placeholder="John1">
@@ -113,6 +129,7 @@
                     </div>
                 </div>
             </div>
+            <script src="../../node_modules/bootstrap/bootstrap.min.js"></script>
         </body>
     </html>
-<?php } ?>
+<?php //} ?>

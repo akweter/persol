@@ -11,8 +11,12 @@
             $pass = $_POST['pass'];
             $email = $_POST['email'];
 
-            if ($_POST['pass'] == '' || $_POST['email'] == '') {
-                echo("<script type='text/javascript'>alert('All fields are required!')</script>"); 
+            if (empty($_POST['pass']) || empty($_POST['email'])) {
+                $required_fields = '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>All fields are required!</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
             }
             // Fetch all users from the database
             $Data = "SELECT * FROM `admin_users` WHERE PassWD = '$pass' AND email_Add = '$email' ";
@@ -37,7 +41,11 @@
                 header('location: ../');
             }
             else{
-                echo("<script type='text/javascript'>alert('Wrong Credentials.')</script>"); 
+                $wrong_input = '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <h4>Crendetials Unmatched!</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
             }
         }
     ?>
@@ -56,7 +64,7 @@
             <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
             <style>
                 body{
-                    margin: 0 20%;
+                    margin: 0 30%;
                     background: gray;
                 }
                 div.modal-dialog{
@@ -69,6 +77,7 @@
         <body>
                 <div class="py-5 modal-dialog">
                     <div class="modal-content p-5 ">
+                            <?php if (isset($required_fields)){echo($required_fields);} if(isset($wrong_input)){echo($wrong_input);} ?>
                         <div class="modal-header pb-4 border-bottom-0">
                             <h1 class="fw-bold mb-0 fs-2">Are You Admin?</h1>
                         </div>
@@ -85,14 +94,15 @@
                                 <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" name="signin" type="submit">Log in</button>
                                 <div style="text-align:center;" id="forgotPass"><a href="#">Forgot password</a></div>
                                 <hr class="my-4">
-                                <div>
+                                <!-- <div>
                                     <h5 style="text-align:center;">Don't have account?</h5>
                                     <a href="./signup.php" class="w-100 mb-4 btn btn-md rounded-3 btn-warning" name="submit" type="submit"><strong> Sign Up</strong></a>
-                                </div>
+                                </div> -->
                             </form>
                         </div>
                     </div>
                 </div>
+                <script src="../../node_modules/bootstrap/bootstrap.min.js"></script>
         </body>
     </html>
 <?php

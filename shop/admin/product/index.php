@@ -87,8 +87,11 @@
             echo "</html>";
         }
         else {
-            echo "<script>alert('All fields are required!')</script>"; 
-        echo "<script>window.location='index.php'</script>";
+            $cannot_be_empty = '
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h4>All fields are required!</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
         }
     }
 ?>
@@ -314,6 +317,7 @@
                                     </div>
 
                                     <div class="col-12 col-md-6">
+                                        <?php if (isset($cannot_be_empty)) {echo($cannot_be_empty);} ?>
                                         <div class="bg-info text-center">
                                             <h2 class="text-danger">Note Maker</h2>
                                             <div style="padding: 0 20px;">

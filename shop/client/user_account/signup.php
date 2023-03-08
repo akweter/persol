@@ -73,7 +73,7 @@
             <meta name="author" content="James Akweter">
             <meta name="generator" content="Angel Dev Team">
             <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-            <title>Admin Sign Up</title>
+            <title>Sign Up</title>
             <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
             <style>
                 body{

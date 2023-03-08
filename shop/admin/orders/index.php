@@ -147,15 +147,15 @@
                                 <td><?=$num++ ?></td>
                                 <td><?=$query['o_orderID'] ?></td>
                                 <td><?=$query['o_username'] ?></td>
-                                <td><?=$query['o_product_id'] ?></td>
+                                <td><a href='../product/action.php?more=<?=$query['o_product_id'];?>'><?=$query['o_product_id'] ?></a></td>
                                 <td><?=$query['o_qty']?></td>
-                                <td><?=$query['o_subtotal']?></td>
-                                <td><?=$query['o_total_payment'] ?></td>
+                                <td>¢<?=$query['o_subtotal']?></td>
+                                <td>¢<?=$query['o_total_payment'] ?></td>
                                 <td><?=$query['o_paymentMode'] ?></td>
                                 <td><?=$query['o_time']?></td>
                                 <td><?=$query['o_date']?></td>
                                 <td><?=$query['status']?></td>
-                                <td class="text-danger"><a href="./edit_order.php?editUser=<?=$query['C_id'];?>"><i class="fa fa-edit fa-lg"></i>Edit</a> | <a onclick="return confirm('This operation is risky. Are you sure to delete?');" href="./order_crud.php?eraseUser=<?=$query['pid'];?>"><i class="fa fa-times fa-lg"></i>Delete</a> | <a href='./order_crud.php?moreDetails=<?=$query['pid'];?>'><i class="fa fa-search fa-lg"></i>View</a></td>
+                                <td class="text-danger"><a href="./edit_order.php?editUser=<?=$query['C_id'];?>"><i class="fa fa-edit fa-lg"></i>Edit</a> | <a onclick="return confirm('This operation is risky. Are you sure to delete?');" href="./order_crud.php?eraseUser=<?=$query['pid'];?>"><i class="fa fa-times fa-lg"></i>Delete</a></td>
                             </tr>
                         </tbody>
                             <?php } ?>

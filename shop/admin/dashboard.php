@@ -100,7 +100,7 @@
         <!-- Main Content -->
         <div class="container-fluid">
             <div class="row">
-                <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <nav class="col-md-2 col-lg-2 d-md-block bg-light sidebar collapse">
                     <div class="position-sticky pt-3 sidebar-sticky">
                         <ul class="nav flex-column">
                             <li class="nav-item">
@@ -135,9 +135,9 @@
                     </div>
                 </nav>
 
-                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <div class="album py-2">
-                        <div class="album py-4 mb-4">
+                <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
+                    <div class="album">
+                        <div class="album mb-4">
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
                                 <div class="col">
                                     <div class="card">
@@ -203,15 +203,56 @@
                         </div>
                         <div class="album">
                             <div class="row row-cols-1 row-cols-sm-1 row-cols-md-3 g-3">
-                                <div class="col col-md-5">
-                                    New Thing
-                                </div>
                                 <div class="col col-md-7">
+                                <h4>Order History <a href="./orders">**</a></h4>
+                                    <table class=" table table-hover">
+                                        <thead class="thead">
+                                            <tr class="table-primary">
+                                                <td>#</td><td>Product Name</td><td>User Name</td><td>Date</td><td>Status</td><td>Total Sale</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="tbody">
+                                            <?php
+                                                $Fetch = mysqli_query($PDO, "SELECT * FROM `orders` ORDER BY o_date ASC") or die("Error fetching products");
+                                                $count = 1; 
+                                                
+                                                if (mysqli_num_rows($Fetch)> 0) {
+                                                    foreach ($Fetch as $query) {
+                                                        $oid = $query['o_orderID'];
+                                                        $o_user = $query['o_username'];
+                                                        $o_pid = $query['o_product_id'];
+                                                        $oDate = $query['o_date'];
+                                                        $oStatus = $query['status'];
+                                                        $oSales = $query['o_total_payment'];?>
+
+                                                        <?php 
+                                                        $product_fetch = "SELECT * FROM `products` WHERE pid = '$o_pid'";
+                                                        $fetch_arrays = mysqli_query($PDO, $product_fetch);
+                                                        while($Val = mysqli_fetch_array($fetch_arrays)){
+                                                            $product_name = $Val['P_name'];
+                                                            $prodct_id = $Val['pid'];
+                                                        }?>
+                                            <tr>
+                                                <td><?=$count++?></td>
+                                                <td><a style="text-decoration:none;" href='./product/action.php?more=<?=$prodct_id;?>'><?=$product_name?></a></td>
+                                                <td><?=$o_user?></td>
+                                                <td><?=$oDate?></td>
+                                                <td><?=$oStatus?></td>
+                                                <td>¢<?=$oSales?>.00</td>
+                                            </tr>
+                                                    <?php }
+                                                }
+
+                                                ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col col-md-5">
                                     <h4 class="">Pending Orders</h4>
                                     <table class=" table table-striped">
                                         <thead class="thead">
-                                            <tr class="table-dark">
-                                                <td>#</td><td>Product Name</td><td>Date</td><td>Status</td><td>Total Sale</td>
+                                            <tr class="table-danger">
+                                                <td>#</td><td>Product Name</td><td>Date</td><!--<td>Status</td>--><td>Total Sale</td>
                                             </tr>
                                         </thead>
                                         <tbody class="tbody">
@@ -232,12 +273,13 @@
                                                         $fetch_arrays = mysqli_query($PDO, $product_fetch);
                                                         while($Val = mysqli_fetch_array($fetch_arrays)){
                                                             $product_name = $Val['P_name'];
+                                                            $prodct_id = $Val['pid'];
                                                         }?>
                                             <tr>
                                                 <td><?=$count++?></td>
-                                                <td><?=$product_name?></td>
+                                                <td><a style="text-decoration:none;" href='./product/action.php?more=<?=$prodct_id;?>'><?=$product_name?></a></td>
                                                 <td><?=$oDate?></td>
-                                                <td><?=$oStatus?></td>
+                                                <!-- <td><?=$oStatus?></td> -->
                                                 <td>¢<?=$oSales?>.00</td>
                                             </tr>
                                                     <?php }
