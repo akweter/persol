@@ -282,10 +282,10 @@
         <?php echo $new_id?>
         <main>
             <!-- block one -->
-            <div id="jumbotrom bg-light" class="mb-5" style="background: url('../public/img/hero.jpg');padding:10%;">
+            <div id="jumbotrom bg-light" class="mb-5" style="background: url('../public/img/s19.jpg');padding:10%;">
                 <div class="row justify-content-around">
-                    <div class="col col-md-6">
-                        <h3 class="amazing_deals fw-bold fs-1 bg-success text-warning">👠Your Shoes Are Here👢</h3>
+                    <div style="margin: -10% 0 0 -25%" class="col col-md-6">
+                        <h3 class="amazing_deals fw-bold fs-1 bg-success text-white">👠Your Shoes Are Here👢</h3>
                     </div>
                 </div>
             </div>
