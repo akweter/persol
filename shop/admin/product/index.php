@@ -1,6 +1,8 @@
 <?php
     session_start();
-    error_reporting(E_WARNING || E_NOTICE || E_ERROR);
+    // error_reporting(E_WARNING || E_NOTICE || E_ERROR);
+    
+    include_once("../../database/config.php");
     
     $admin_signup =  $_SESSION['admin_sign_up'];
     $admin_login = $_SESSION['admin_login'];
@@ -10,9 +12,13 @@
     if (empty($admin_login) || empty($admin_signup)) {
         header('location: ../auth/login.php');
     }
-   
-
-    include_once("../../database/config.php");
+    
+    // QUERY DATABSE FOR SEARCH PRODUCT
+    $search_product_name = mysqli_query($PDO, "SELECT * FROM `products` ");
+        while($Val = mysqli_fetch_array($search_product_name)){
+            $product_name = $Val['P_name'];
+        }
+    
     if (isset($_POST['P_Upload'])) {
         $pid = '';
         $sku = filter_var($_POST['P_Sku'], FILTER_SANITIZE_STRING);
@@ -98,22 +104,22 @@
 
     <!DOCTYPE html>
     <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Supermarket Management Software">
-        <meta name="author" content="James Akweter">
-        <meta name="generator" content="Angel Dev Team">
-        <link rel="icon" sizes="180x180" href="../../public/img/glass.webp">
-        <link rel="apple-touch-icon" sizes="180x180" href="../../public/img/glass.webp">
-        <title>Admin Dashboard</title>
-        <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
-        <link rel="stylesheet" href="../../node_modules/fontawesome/css/all.css">
-        <style>
-            .fa-times{color:red;}.fa-search{color:green;}
-        </style>
-    </head>
+        <head>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="description" content="Supermarket Management Software">
+            <meta name="author" content="James Akweter">
+            <meta name="generator" content="Angel Dev Team">
+            <link rel="icon" sizes="180x180" href="../../public/img/glass.webp">
+            <link rel="apple-touch-icon" sizes="180x180" href="../../public/img/glass.webp">
+            <title>Admin Dashboard</title>
+            <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <style>
+                .fa-times{color:red;}.fa-search{color:green;}
+            </style>
+        </head>
     <body>
 
         <!-- Header -->
@@ -145,7 +151,7 @@
             </div>
             <div class="px-3 bg-light py-2 border-bottom mb-3">
                 <div class="container d-flex flex-wrap justify-content-center">
-                    <form action="../search/index.php" method="POST" class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
+                    <form action="../search/index.php?product=<?=$product_name?>" method="POST" class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
                         <input type="search" name="product" class="form-control" placeholder="I am looking for..." aria-label="Search">
                     </form>
 
@@ -224,7 +230,7 @@
                                         </tr>
                                     </thead>
                                     <?php
-                                    $Fetch = mysqli_query($PDO, "SELECT * FROM `products` ORDER BY `P_Sku` ASC") or die("Error fetching products");
+                                    $Fetch = mysqli_query($PDO, "SELECT * FROM `products` ORDER BY `P_category` ASC") or die("Error fetching products");
                                     $num = 1;
                                     
                                     while($query = mysqli_fetch_array($Fetch)){ ?>
@@ -273,32 +279,36 @@
                                                     <div style="display:flex;flex-direction:row;">
                                                         <div style="width:70%;" class="form-group mb-3">
                                                             <select required class="form-control" name="P_Category" id="P_Category">
-                                                                <option value="" selected disabled class="option">Select Category</option>
-                                                                <option value="Cement" class="option">Cement</option>
-                                                                <option value="Rope" class="option">Rope</option>
-                                                                <option value="Insulation" class="option">Insulation</option>
-                                                                <option value="Armaflex" class="option">Armaflex</option>
-                                                                <option value="Roofing" class="option">Roofing</option>
-                                                                <option value="Expandable" class="option">Expandable Polystyrene</option>
-                                                                <option value="Donwproofing" class="option">Bitumen</option>
-                                                                <option value="Wooden" class="option">Wooden</option>
-                                                                <option value="Plumbing" class="option">Plumbing</option>
-                                                                <option value="Cladding" class="option">Cladding</option>
+                                                                <option value="" selected disabled class="option">Shoe Brand</option>
+                                                                <option value="Adidas" class="option">Adidas</option>
+                                                                <option value="Air Force" class="option">Air Force</option>
+                                                                <option value="All Stars" class="option">All Stars</option>
+                                                                <option value="Almani" class="option">Almani</option>
+                                                                <option value="Classic" class="option">Classic</option>
+                                                                <option value="Elegance" class="option">Elegance</option>
+                                                                <option value="Jordan" class="option">Jordan</option>
+                                                                <option value="Louis Vuiton" class="option">Louis Vuiton</option>
+                                                                <option value="MC Queen" class="option">MC Queen</option>
+                                                                <option value="New Ballance" class="option">New Ballance</option>
+                                                                <option value="Nike" class="option">Nike</option>
+                                                                <option value="Puma" class="option">Puma</option>
+                                                                <option value="Reebok" class="option">Reebok</option>
+                                                                <option value="Sportsman" class="option">Sportsman</option>
                                                             </select>
                                                         </div>
                                                         <div style="width:30%; margin-left:10px;" class="form-group mb-3">
                                                             <select required class="form-control" name="P_Unit" id="P_Unit">
-                                                                <option value="" selected disabled class="option">Unit</option>
-                                                                <option value="Packet" class="option">Packet</option>
-                                                                <option value="Gallon" class="option">Gallon</option>
-                                                                <option value="Bucket" class="option">Bucket</option>
-                                                                <option value="Piece" class="option">Piece</option>
-                                                                <option value="Bag" class="option">Bag</option>
-                                                                <option value="Roll" class="option">Roll</option>
-                                                                <option value="Sheet" class="option">Sheet</option>
-                                                                <option value="Board" class="option">Board</option>
+                                                                <option value="" selected disabled class="option">Shoe Type</option>
+                                                                <option value="Canvas" class="option">Canvas</option>
+                                                                <option value="Boot" class="option">Boot</option>
+                                                                <option value="Flirt" class="option">Flirt</option>
+                                                                <option value="Heel" class="option">Heel</option>
+                                                                <option value="Slipper" class="option">Slipper</option>
+                                                                <option value="Skipper" class="option">Skipper</option>
+                                                                <option value="Sneaker" class="option">Sneaker</option>
+                                                                <!-- <option value="Board" class="option">Board</option>
                                                                 <option value="Pair" class="option">Pair</option>
-                                                                <option value="Yard" class="option">Yard</option>
+                                                                <option value="Yard" class="option">Yard</option> -->
                                                             </select>
                                                         </div>
                                                     </div>

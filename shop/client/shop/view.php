@@ -208,7 +208,7 @@
                                                     <img src="../../public/img/<?=$new_image?>" class="fluid img-fluid" alt="image">
                                                 </div>
                                                 <div class="col col-md-8">
-                                                    <h3> Product Overview</h3>
+                                                    <h3> Description</h3>
                                                     <form action="" method="post">
                                                         <p class="card-text"><?=$new_details?>.</p>
                                                         <p><strong>Category:</strong><a class="text-decoration-none" href="./view_one.php?product=<?=$new_category?>"> <i class="text-danger"><?=$new_category?></a></i></p>
@@ -231,11 +231,11 @@
                                     <h2>Related Products</h2>
                                     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5">
                                     <?php
-                                        $Fetch = mysqli_query($PDO, "SELECT * FROM `products` ORDER BY `P_Sku` ASC") or die("Error fetching products");
+                                        $Fetch = mysqli_query($PDO, "SELECT * FROM `products` ORDER BY `P_Sku` ASC") or die("Error fetching products bd-placeholder-img card-img-top fluid img-fluid");
                                         while($query = mysqli_fetch_array($Fetch)){ ?>
                                             <div class="col mt-4">
                                                 <div class="card shadow-sm">
-                                                    <a href="./view.php?view=<?=$query['pid'];?>"><img class="bd-placeholder-img card-img-top fluid img-fluid" src="../../public/img/<?=$query['P_image'] ?>" alt="<?php echo $query['P_name'] ?>"></a>
+                                                    <a href="./view.php?view=<?=$query['pid'];?>"><img class="" width="200" height="200" src="../../public/img/<?=$query['P_image'] ?>" alt="<?php echo $query['P_name'] ?>"></a>
                                                     <div class="card-body">
                                                         <p class="card-text"><strong><?=$query['P_name'] ?></strong> <i class="badge bg-danger">¢<?=$query['P_price'] ?></i></p>
                                                         <div class="d-flex justify-content-between align-items-center">

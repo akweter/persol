@@ -68,7 +68,7 @@
             <div class="bg-info">
                 <div class="container p-3">
                     <a href="./" class="btn btn-lg btn-warning" style="float:right;">Go Back</a>
-                    <h1>Details of (<a class="text-danger" href="./action.php?more=<?=$pid?>"><?=$new_name?></a>)<i class="badge p-2 m-1 bg-danger">¢<?=$new_price?>.99</i></h1>
+                    <h1><a class="text-light text-decoration-none" href="./action.php?more=<?=$pid?>"><?=$new_name?></a> -  <i class="badge p-2 m-1 bg-danger">¢<?=$new_price?>.99</i></h1>
                 </div>
             </div>
         </header>

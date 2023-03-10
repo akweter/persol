@@ -133,13 +133,15 @@
             }
 
             body, .options{
-                background: #f7f3de;
+                backgroun: #f7f3de;
             }
 
             p#jumbotrom_text{
                 font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
                 text-align: center;
             }
+
+            .fs-3{text-align:center;color:red;text-transform: capitalize;text-decoration: 3px solid #3bd8ec overline;margin-bottom: 20px;}
 
             .try-body{
                 text-align: center;
@@ -283,7 +285,7 @@
             <div id="jumbotrom bg-light" class="mb-5" style="background: url('../public/img/hero.jpg');padding:10%;">
                 <div class="row justify-content-around">
                     <div class="col col-md-6">
-                        <h3 class="amazing_deals fw-bold fs-1 bg-danger text-light">Amazing Deals Are Here</h3>
+                        <h3 class="amazing_deals fw-bold fs-1 bg-success text-warning">👠Your Shoes Are Here👢</h3>
                     </div>
                 </div>
             </div>
@@ -309,47 +311,50 @@
 
                     <!-- block three -->
                 <div class="container">
+                    <h1 class="fs-3">The Amazing Collections</h1>
                     <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-lg-4 align-items-stretch mb-5 p-0">
 
                         <div class="col mb-4">
-                            <a href="./shop/view_one.php?product=Insulation" class="text-decoration-none">
+                            <a href="./shop/view_one.php?product=Nike" class="text-decoration-none">
                                 <div class="card align-items-center justify-content-center shadow-lg">
-                                    <div class="d-flex flex-column text-shadow-1">
-                                        <h4>Sound Proof</h4>
-                                        <img style="height:210px;" src="../public/img/batt cavtiy 2.jpg" alt="img" class="img fluid img-fluid rounded-4">
+                                    <div class="bg-danger d-flex flex-column text-shadow-1">
+                                        <!-- <h4>Nike</h4> -->
+                                        <img style="height:70%;width:100%;padding:5px;" src="../public/img/s1.jpg" alt="Nike" class=" rounded-4">
                                     </div>
                                 </div>
                             </a>
                         </div>
 
                         <div class="col mb-4">
-                            <a href="./shop/view_one.php?product=Wooden" class="text-decoration-none">
+                            <a href="./shop/view_one.php?product=Reebok" class="text-decoration-none">
                                 <div class="card rounded-4 align-items-center justify-content-center shadow-lg">
-                                    <div class="d-flex flex-column text-shadow-1">
-                                        <h4>Wooden Products</h4>
-                                        <img style="height:210px;" src="../public/img/woods.png" alt="img" class="img fluid img-fluid rounded-4">
+                                    <div class="bg-warning d-flex flex-column text-shadow-1">
+                                        <!-- <h4>Reebok</h4> -->
+                                        <img style="height:70%;width:100%;padding:5px;" src="../public/img/s5.jpg" alt="Reebok" class=" rounded-4">
                                     </div>
                                 </div>
                             </a>
                         </div>
 
                         <div class="col">
-                            <a href="./shop/view_one.php?product=Plumbing" class="text-decoration-none">
+                            <a href="./shop/view_one.php?product=New" class="text-decoration-none">
                                 <div class="card rounded-4 align-items-center justify-content-center shadow-lg">
-                                    <div class="d-flex flex-column text-shadow-1">
-                                        <h4>Plumbing Deals</h4>
-                                        <img style="height:210px;" src="../public/img/plastic materials.webp" alt="img" class="img fluid img-fluid rounded-4">
+                                    <div class="bg-success d-flex flex-column text-shadow-1">
+                                        <!-- <h4>Plumbing Deals</h4> -->
+                                        <!-- <img style="height:210px;" src="../public/img/plastic materials.webp" alt="img" class="img fluid img-fluid rounded-4"> -->
+                                        <img style="height:70%;width:100%;padding:5px;" src="../public/img/s6.jpg" alt="Reebok" class=" rounded-4">
                                     </div>
                                 </div>
                             </a>
                         </div>
 
                         <div class="col">
-                            <a href="./shop/view_one.php?product=Expandable" class="text-decoration-none">
+                            <a href="./shop/view_one.php?product=MC Queen" class="text-decoration-none">
                                 <div class="card rounded-4 align-items-center justify-content-center shadow-lg">
-                                    <div class="d-flex flex-column text-shadow-1">
-                                        <h4>Expandable Products</h4>
-                                        <img style="height:210px;" src="../public/img/45-liter-EPS-doos--scaled.webp" alt="img" class="img fluid img-fluid rounded-4">
+                                    <div class="bg-primary d-flex flex-column text-shadow-1">
+                                        <!-- <h4>Expandable Products</h4> -->
+                                        <!-- <img style="height:210px;" src="../public/img/45-liter-EPS-doos--scaled.webp" alt="img" class="img fluid img-fluid rounded-4"> -->
+                                        <img style="height:70%;width:100%;padding:5px;" src="../public/img/s7.jpg" alt="Reebok" class=" rounded-4">
                                     </div>
                                 </div>
                             </a>
@@ -359,10 +364,10 @@
                     <!-- block four -->
                     <div class="mb-5 p-0">
                         <div id="perfect_deals" class="row">
-                            <h3 class="fs-3" style="text-align:center;">Perfect Deals</h3>
+                            <h3 class="fs-3" style="text-align:center;">GiveAway Deals</h3>
                             <div class="row row-cols-2 p-0 row-cols-sm-2 row-cols-md-4">
                             <?php
-                                $Fetch = mysqli_query($PDO, "SELECT * FROM `products` ORDER BY `P_Sku` ASC") or die("Error fetching products");
+                                $Fetch = mysqli_query($PDO, "SELECT * FROM `products` ORDER BY `P_name` ASC") or die("Error fetching products");
                                 while($query = mysqli_fetch_array($Fetch)){ 
                                     $pid = $query['pid'];
                                     $p_name = $query['P_name'];
@@ -376,7 +381,7 @@
                                     ?>
                                     <div class="col mb-4">
                                         <div class="card shadow-sm">
-                                            <a href="./shop/view.php?view=<?=$pid?>"><img class="bd-placeholder-img card-img-top" src="../public/img/<?=$p_image?>" width="300" height="150" alt="<?=$p_image?>"></a>
+                                            <a href="./shop/view.php?view=<?=$pid?>"><img class="bd-placeholder-img card-img-top" src="../public/img/<?=$p_image?>" width="300" height="230" alt="<?=$p_image?>"></a>
                                             <div class="card-body">
                                                 <p class="card-text"><strong><?=$p_name?>
                                                     <i class="badge bg-danger">¢<?=$p_price?></i></strong></p>

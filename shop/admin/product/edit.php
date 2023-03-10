@@ -90,8 +90,7 @@
         <link rel="apple-touch-icon" sizes="180x180" href="../../public/img/glass.webp">
         <title>Edit Products</title>
         <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
-        <link rel="stylesheet" href="../../node_modules/fontawesome/css/all.min.css">
-        <link rel="stylesheet" href="../../node_modules/fontawesome/css/all.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body>
 
@@ -101,7 +100,7 @@
                 <div class="container p-3">
                     <a href="./" class="btn btn-lg btn-primary" style="float:right;margin-left:10px;">Dashboard</a>
                     <a href="./action.php?more=<?=$product_ID?>" class="btn btn-lg btn-warning" style="float:right;">Go Back</a>
-                    <h1 class="text-danger">Editing <k class="text-success"><?php if (isset($new_name)) {echo($new_name);}else{echo('Product');} ?></k></h1>
+                    <h1 class="text-secondary"><?php if (isset($admin_username)) {echo($admin_username);}?> is editing <k class="text-white"><?php if (isset($new_name)) {echo($new_name);}else{echo('Product');} ?></k></h1>
                 </div>
             </div>
         </header>
@@ -129,36 +128,39 @@
                                             </div>
                                         </div>
                                         <div style="display:flex;flex-direction:row;">
-                                            <div style="width:70%;" class="form-group mb-3">
-                                                <select required class="form-control" value="<?=$new_category?>" name="P_Category">
-                                                    <option value="" disabled class="option">Select Category</option>
-                                                    <option value="cement" class="option">Cement</option>
-                                                    <option value="Rope" class="option">Rope</option>
-                                                    <option value="insulation" class="option">Insulation</option>
-                                                    <option value="armaflex" class="option">Armaflex</option>
-                                                    <option value="Roofing" class="option">Roofing</option>
-                                                    <option value="Expandable" class="option">EPS</option>
-                                                    <option value="Donwproofing" class="option">Bitumen</option>
-                                                    <option value="Wooden" class="option">Wooden</option>
-                                                    <option value="Plumbing" class="option">Plumbing</option>
-                                                    <option value="Cladding" class="option">Cladding</option>
-                                                </select>
-                                            </div>
-                                        <div style="width:30%; margin-left:10px;" class="form-group mb-3">
-                                                <select required class="form-control" value="<?=$new_unit?>" name="P_Unit">
-                                                    <option value="unit" disabled class="option">Unit</option>
-                                                    <option value="PKTS" class="option">Packet</option>
-                                                    <option value="gallon" class="option">Gallon</option>
-                                                    <option value="can" class="option">Can</option>
-                                                    <option value="PC" class="option">Piece</option>
-                                                    <option value="Bag" class="option">Bag</option>
-                                                    <option value="Roll" class="option">Roll</option>
-                                                    <option value="Sheet" class="option">Sheet</option>
-                                                    <option value="BDS" class="option">Board</option>
-                                                    <option value="Pair" class="option">Pair</option>
-                                                    <option value="Yard" class="option">Yard</option>
-                                                </select>
-                                            </div>
+                                        <div style="width:70%;" class="form-group mb-3">
+                                                            <select required class="form-control" name="P_Category" id="P_Category">
+                                                                <option value="" selected disabled class="option">Shoe Brand</option>
+                                                                <option value="Adidas" class="option">Adidas</option>
+                                                                <option value="Air Force" class="option">Air Force</option>
+                                                                <option value="All Stars" class="option">All Stars</option>
+                                                                <option value="Almani" class="option">Almani</option>
+                                                                <option value="Classic" class="option">Classic</option>
+                                                                <option value="Elegance" class="option">Elegance</option>
+                                                                <option value="Jordan" class="option">Jordan</option>
+                                                                <option value="Louis Vuiton" class="option">Louis Vuiton</option>
+                                                                <option value="MC Queen" class="option">MC Queen</option>
+                                                                <option value="New Ballance" class="option">New Ballance</option>
+                                                                <option value="Puma" class="option">Puma</option>
+                                                                <option value="Reebok" class="option">Reebok</option>
+                                                                <option value="Sportsman" class="option">Sportsman</option>
+                                                            </select>
+                                                        </div>
+                                            <div style="width:30%; margin-left:10px;" class="form-group mb-3">
+                                                            <select required class="form-control" name="P_Unit" id="P_Unit">
+                                                                <option value="" selected disabled class="option">Shoe Type</option>
+                                                                <option value="Canvas" class="option">Canvas</option>
+                                                                <option value="Sneaker" class="option">Sneaker</option>
+                                                                <option value="Boot" class="option">Boot</option>
+                                                                <option value="Heel" class="option">Heel</option>
+                                                                <option value="Slipper" class="option">Slipper</option>
+                                                                <option value="Skipper" class="option">Skipper</option>
+                                                                <option value="Flirt" class="option">Flirt</option>
+                                                                <!-- <option value="Board" class="option">Board</option>
+                                                                <option value="Pair" class="option">Pair</option>
+                                                                <option value="Yard" class="option">Yard</option> -->
+                                                            </select>
+                                                        </div>
                                         </div>
                                         <div style="display:flex;flex-direction:row;" class="form-group mb-3">
                                             <input required type="image" width="150" height="100" src="../../public/img/<?=$new_image?>" alt="<?=$new_name?>">

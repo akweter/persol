@@ -53,7 +53,7 @@
                     <form action="./index.php" method="post">
                         <div style="display:flex;flex-direction:row;">
                             <div style="width:95%; margin-right:1%;">
-                                <input type="search" class="form-control" name="q" placeholder="I am looking for..." value="<?php if (isset($search_term)) {echo($search_term);} ?>" aria-label="Search">
+                                <input type="search" class="form-control" name="q" placeholder="<?php if (isset($search_term)) {echo($search_term);}else{echo("I am looking for...");} ?>" aria-label="Search">
                             </div>
                             <div>
                                 <a type="submit" href=""><button class="btn btn-outline-light btn-warning" type="submit"><i class="fa  fa-search fa-lg"></i></button></a>
@@ -69,23 +69,24 @@
     <?php
         include_once("../../database/config.php");
 
-        if (isset($_POST['q'])) {
+        if (! empty($_POST['q'])) {
             $search_term = $_POST['q'];
 
             if (! empty($search_term)) {
-                $search = mysqli_query($PDO,"SELECT * FROM `products` WHERE CONCAT(P_name,P_Sku,P_detail,P_category) LIKE '%$search_term%' ORDER BY P_name ASC");
+                $search = mysqli_query($PDO,"SELECT * FROM `products` WHERE CONCAT(P_name,P_detail) LIKE '%$search_term%' ORDER BY P_name ASC");
                 
                 if(mysqli_num_rows($search) > 0){
                     foreach($search as $data){
                         $new_name = $data['P_name'];
                         $pid = $data['pid'];
-                        $new_image = $data['P_image'];?>
+                        $new_image = $data['P_image'];
+                        $new_category = $data['P_category'];?>
                         
-                        <div class="list-group mb-5 mt-4">
-                            <a href="../shop/view.php?view=<?=$pid?>" class="list-group-item-action d-flex gap-3 " aria-current="true">
+                        <div class="list-group mt-2">
+                            <a href="../shop/view.php?view=<?=$pid?>" class="list-group-item-action d-flex gap-3 text-decoration-none" aria-current="true">
                                 <img src="../../public/img/<?=$new_image?>" alt="<?=$new_name?>" width="32" height="32" class="flex-shrink-0">
                                 <div class="d-flex justify-content-between align-item-center">
-                                    <h6 class="mb-0"><?=$new_name?></h6>
+                                    <p class="mb-0"><?=$new_name?> | <?=$new_category?></p>
                                 </div>
                             </a>
                         </div> <?php

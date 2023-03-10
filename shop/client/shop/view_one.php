@@ -82,7 +82,7 @@
                 // DISPLAY PRODUCT DATA VIA ID
                 if ((isset($_GET['product']))) {
                     $product_CAT = $_GET['product']; ?>
-                    <h2 class="mb-5"><?=$product_CAT?> Products</h2>
+                    <h2 class="mb-5">Affordable <?=$product_CAT?> Deals</h2>
                     <?php if (! empty($product_CAT)) {
                     $Fetch = mysqli_query($PDO, "SELECT * FROM `products` WHERE CONCAT(P_category,P_name) LIKE '%$product_CAT%' ") or die("Error fetching products"); 
                     

@@ -13,6 +13,12 @@
         header('location: ../auth/login.php');
     }
 
+    // QUERY DATABSE FOR SEARCH PRODUCT
+    $search_product_name = mysqli_query($PDO, "SELECT * FROM `products` ");
+    while($Val = mysqli_fetch_array($search_product_name)){
+        $product_name = $Val['P_name'];
+    } $stock_details = $Val['P_name'];
+
         $cement_cat = "SELECT SUM(P_qty) FROM `products` WHERE P_category = 'Cement'";
         $fetch_arrays = mysqli_query($PDO, $cement_cat);
         while($Val = mysqli_fetch_array($fetch_arrays)){
@@ -88,8 +94,7 @@
         <link rel="apple-touch-icon" sizes="180x180" href="../../public/img/glass.webp">
         <title>Admin Dashboard</title>
         <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
-        <link rel="stylesheet" href="../../node_modules/fontawesome/css/all.min.css">
-        <link rel="stylesheet" href="../../node_modules/fontawesome/css/all.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body>
 
@@ -122,8 +127,8 @@
             </div>
             <div class="px-3 py-2 bg-light border-bottom mb-3">
                 <div class="container d-flex flex-wrap justify-content-center">
-                    <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
-                        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                    <form style="width:60%;" action="../search/index.php?product=<?=$product_name?>" method="POST" class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
+                        <input type="search" name="product" class="form-control" placeholder="I am looking for..." aria-label="Search">
                     </form>
 
                     <div class="btn-toolbar mb-2 mb-md-0">
@@ -213,7 +218,5 @@
             </div>
         </div>
         <script src="../../node_modules/bootstrap/bootstrap.min.js"></script>
-        <script src="../../node_modules\fontawesome\js\fontawesome.min.js"></script>
-        <script src="../../node_modules\fontawesome\js\all.min.js"></script>
     </body>
 </html>

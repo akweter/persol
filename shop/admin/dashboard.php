@@ -12,6 +12,12 @@
         header('location: ./auth/login.php');
     }
 
+    // QUERY DATABSE FOR SEARCH PRODUCT
+    $search_product_name = mysqli_query($PDO, "SELECT * FROM `products` ");
+        while($Val = mysqli_fetch_array($search_product_name)){
+            $product_name = $Val['P_name'];
+        }
+
         // COUNT USERS FROM CUSTOMERS DB
         $total_customers = "SELECT * FROM `customers` ORDER BY C_id ASC";
         $fetch_arrays = mysqli_query($PDO, $total_customers);
@@ -37,8 +43,8 @@
     
 ?>
 
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -50,7 +56,7 @@
         <link rel="apple-touch-icon" sizes="180x180" href="../public/img/glass.webp">
         <title>Admin Dashboard</title>
         <link rel="stylesheet" href="../node_modules/bootstrap/bootstrap.min.css">
-        <link rel="stylesheet" href="../node_modules/fontawesome/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
             .card-title,.card-text{color:red;cursor: pointer;}.fa{color:lightgreen;}
         </style>
@@ -86,8 +92,8 @@
             </div>
             <div class="bg-light px-3 py-2 border-bottom mb-3">
                 <div class="container d-flex flex-wrap justify-content-center">
-                    <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
-                        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                    <form style="width:60%;" action="./search/index.php?product=<?=$product_name?>" method="POST" class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
+                        <input type="search" name="product" class="form-control" placeholder="I am looking for..." aria-label="Search">
                     </form>
 
                     <div class="btn-toolbar mb-2 mb-md-0">
@@ -128,7 +134,7 @@
                         </h6>
                         <ul class="nav flex-column mb-2">
                             <li class="nav-item">
-                            <img src="./" alt="Avatar">
+                            <img src="../public/img/wheat.jpg" width="50" height="50" alt="Avatar">
                             </li>
                             
                         </ul>

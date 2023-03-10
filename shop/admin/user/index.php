@@ -12,8 +12,14 @@
         header('location: ./auth/login.php');
     }
 
-    if(isset($_POST['Signup'])){
+    // QUERY DATABSE FOR SEARCH PRODUCT
+    $search_product_name = mysqli_query($PDO, "SELECT * FROM `admin_users` ");
+        while($Val = mysqli_fetch_array($search_product_name)){
+            $user_name = $Val['Username'];
+    }
 
+    // POST ADMIN DATA TO THE ADMIN DB
+    if(isset($_POST['Signup'])){
         if( empty($_POST['username']) || empty($_POST['email']) || empty($_POST['pass1']) ) {
             $fields_required = '
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -62,11 +68,70 @@
             }
         }
     }
+
+    // POST CUSTOMER DATA TO THE DATABASE
+    if(isset($_POST['add_new_customer_btn'])){
+        if( empty($_POST['new_username']) || empty($_POST['new_email']) || empty($_POST['new_pass']) ) {
+            $fields_required = '
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h4>All fields are required!</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
+        }
+        elseif (($_POST['new_pass']) !== ($_POST['pass2'])) {
+            $wrong_input = '
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <h4>Passwords do not match</h4
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
+        }
+        else {
+            $new_email = htmlspecialchars($_POST['new_email']);
+            $new_username = htmlspecialchars($_POST['new_username']);
+            $new_pass = htmlspecialchars($_POST['new_pass']);
+            $admin_status = htmlspecialchars($_POST['Admin']);
+            $avatar = htmlspecialchars($_POST['avatar']);
+            $new_fname = htmlspecialchars($_POST['new_fname']);
+            $new_lname = htmlspecialchars($_POST['new_lname']);
+            $new_phone = htmlspecialchars($_POST['new_phone']);
+            $new_town = htmlspecialchars($_POST['new_town']);
+            $new_city = htmlspecialchars($_POST['new_city']);
+            $new_region = htmlspecialchars($_POST['new_region']);
+            $new_country = htmlspecialchars($_POST['new_country']);
+            $new_gps = htmlspecialchars($_POST['new_gps']);
+
+            // Comaparing user info to the one in the database
+            $Data = "SELECT * FROM `customers` WHERE Username = '$new_username' OR email_Add = '$new_email' ";
+            $Query = mysqli_query($PDO, $Data) or die("Error fetching email and password");
+
+            if(mysqli_num_rows($Query) > 0){
+                $user_exists = '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <h4>Username or Email exists!</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+            }
+            else{
+                // $_SESSION['admin'] = 'Admin';
+                // $_SESSION['admin_login'] = 'true';
+                // $_SESSION['admin_sign_up'] = 'true';
+                // $_SESSION['admin_username'] = $Username;
+                
+                mysqli_query($PDO, "INSERT INTO `customers`(`C_id`, `C_fn`, `C_ln`, `C_country`, `C_city`, `C_town`, `C_GPS`, `C_image`, `email_Add`, `Username`, `Telephone`, `Status`, `PassWD`, `P_region`) VALUES ('', '$new_fname', '$new_lname', '$new_country', '$new_city', '$new_town', '$new_gps', '$avatar', '$new_email', '$new_username', '$new_phone', '$admin_status', '$new_pass', '$new_region')");
+
+                $user_added = '
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <h4>New Customer added sucessfully</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>';
+            }
+        }
+    }
    
 ?>
 
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -78,14 +143,13 @@
         <link rel="apple-touch-icon" sizes="180x180" href="../../public/img/glass.webp">
         <title>Admin Dashboard</title>
         <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
-        <link rel="stylesheet" href="../../node_modules/fontawesome/css/all.min.css">
-        <link rel="stylesheet" href="../../node_modules/fontawesome/css/all.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
-    <body>
 
+    <body>
         <!-- Header -->
         <header>
-        <div class="px-3 py-2 bg-info">
+            <div class="px-3 py-2 bg-info">
                 <div class="container">
                     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <a href="./" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
@@ -112,8 +176,8 @@
             </div>
             <div class="px-3 py-2 bg-light border-bottom mb-3">
                 <div class="container d-flex flex-wrap justify-content-center">
-                    <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
-                        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                <form style="width:60%;" action="../search/index.php?user=<?=$user_name?>" method="POST" class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
+                        <input type="search" name="product" class="form-control" placeholder="I am looking for..." aria-label="Search">
                     </form>
 
                     <div class="btn-toolbar mb-2 mb-md-0">
@@ -167,7 +231,7 @@
                         </h6>
                         <ul class="nav flex-column mb-2">
                             <li class="nav-item">
-                            <img src="./" alt="Avatar">
+                            <img src="../../public/img/wheat.jpg" width="50" alt="Avatar">
                             </li>
                             
                         </ul>
@@ -175,19 +239,22 @@
                 </nav>
 
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                    <?php if (isset($user_added)) {echo($user_added);} if (isset($user_exists)) {echo($user_exists);} if (isset($wrong_input)) {echo($wrong_input);} if (isset($fields_required)) {echo($fields_required);} ?>
+
                     <div id="user_carousel" class="carousel slide">
                         <div class="carousel-inner">
 
-                        <!-- ITEM ONE -->
+                            <!-- ITEM ONE -->
                             <div class="carousel-item active">
+                            <button data-bs-toggle="modal" data-bs-target="#add_customer_modal" class="btn btn-warning btn-lg m-2">Add new customer</button>
                                 <table class="table table-hover">
                                     <thead>
                                         <tr class="table-dark">
                                             <th scope="col">#</th>
                                             <th scope="col">Username</th>
                                             <th scope="col">Email</th>
-                                            <th scope="col">First Name</th>
-                                            <th scope="col">Last Name</th>
+                                            <!-- <th scope="col">First Name</th> -->
+                                            <!-- <th scope="col">Last Name</th> -->
                                             <!-- <th scope="col">Status</th> -->
                                             <th scope="col">Action</th>
                                         </tr>
@@ -196,16 +263,23 @@
                                         $Fetch = mysqli_query($PDO, "SELECT * FROM `customers` ORDER BY Username ASC") or die("Error fetching products");
                                         $num = 1;
                                                     
-                                        while($query = mysqli_fetch_array($Fetch)){ ?>
+                                        while($query = mysqli_fetch_array($Fetch)){
+                                            $username = $query['Username'];
+                                            $user_id = $query['C_id'];
+                                            $user_email = $query['email_Add'];
+                                            $user_status = $query['Status'];
+                                            $user_FName = $query['C_fn'];
+                                            $user_LName = $query['C_ln'];
+                                        ?>
                                     <tbody>
                                         <tr>
                                             <td><?=$num++ ?></td>
-                                            <td><?=$query['Username'] ?></td>
-                                            <td><?=$query['email_Add'] ?></td>
-                                            <td><?=$query['C_fn'] ?></td>
-                                            <td><?=$query['C_ln']?></td>
-                                            <!-- <td><?=$query['Status']?></td> -->
-                                            <td class="text-danger"><a href="./edit_customer.php?editUser=<?=$query['C_id'];?>"><i class="fa fa-edit fa-lg"></i>Edit</a> | <a onclick="return confirm('This operation is risky. Are you sure to delete?');" href="./user_action.php?eraseUser=<?=$query['pid'];?>"><i class="fa fa-times fa-lg"></i>Delete</a> | <a href='./user_action.php?moreDetails=<?=$query['pid'];?>'><i class="fa fa-search fa-lg"></i>View</a></td>
+                                            <td><a href="./user_action.php?customerDetails=<?=$user_id?>" class="text-decoration-none"><?=$username?></a></td>
+                                            <td><?=$user_email?></td>
+                                            <!-- <td><?=$user_FName?></td> -->
+                                            <!-- <td><?=$user_LName?></td> -->
+                                            <!-- <td><?=$user_LName?></td> -->
+                                            <td class="text-danger"><a onclick="return confirm('This operation is risky. Are you sure to delete?');" href="./user_action.php?eraseCustomer=<?=$user_id;?>"><i class="fa fa-times fa-lg"></i>Delete</a> | <a href='./edit_customer.php?editCustomer=<?=$user_id;?>'>Edit</a></td>
                                         </tr>
                                     </tbody>
                                         <?php } ?>
@@ -215,29 +289,33 @@
                             <!-- ITEM TWO -->
                             <div class="carousel-item">
                                 <a data-bs-toggle="modal" data-bs-target="#add_new_admin_modal" href="#" class="btn btn-lg btn-primary m-2">Add new admin</a>
-                            <?php if (isset($user_added)) {echo($user_added);} if (isset($user_exists)) {echo($user_exists);} if (isset($wrong_input)) {echo($wrong_input);} if (isset($fields_required)) {echo($fields_required);} ?>
                                 <table class="table table-striped">
                                     <thead>
                                         <tr class="table-danger">
-                                            <th scope="col">#</th>
+                                            <th scope="col">N#</th>
+                                            <th scope="col">ID #</th>
                                             <th scope="col">Username</th>
                                             <th scope="col">Email</th>
-                                            <!-- <th scope="col">Status</th> -->
-                                            <th scope="col">Action</th>
+                                            <th scope="col">Status</th>
                                         </tr>
                                     </thead>
                                         <?php
-                                        $Fetch = mysqli_query($PDO, "SELECT * FROM `admin_users` ORDER BY Username ASC") or die("Error fetching products");
+                                        $Fetch = mysqli_query($PDO, "SELECT * FROM `admin_users` ORDER BY Admin_id ASC") or die("Error fetching products");
                                         $num = 1;
                                                     
-                                        while($query = mysqli_fetch_array($Fetch)){ ?>
+                                        while($query = mysqli_fetch_array($Fetch)){
+                                            $username = $query['Username'];
+                                            $admin_id = $query['Admin_id'];
+                                            $user_email = $query['email_Add'];
+                                            $user_status = $query['Status'];
+                                        ?>
                                     <tbody>
                                         <tr>
                                             <td><?=$num++ ?></td>
-                                            <td><?=$query['Username'] ?></td>
-                                            <td><?=$query['email_Add'] ?></td>
-                                            <!-- <td><?=$query['Status'] ?></td> -->
-                                            <td class="text-danger"><a href='./user_action.php?adminDetails=<?=$query['Admin_id'];?>'><i class="fa fa-search fa-lg"></i>View More</a></td>
+                                            <td><?=$admin_id?></td>
+                                            <td><?=$username?></td>
+                                            <td><?=$user_email?></td>
+                                            <td><?=$user_status?></td>
                                         </tr>
                                     </tbody>
                                         <?php } ?>
@@ -246,6 +324,82 @@
                         </div>
                     </div>
                 </main>
+            </div>
+        </div>
+  
+        <!-- ADD NEW CUSTOMER MODAL -->
+        <div class="modal fade" id="add_customer_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="add_new_customer_modal">A New Customer Details</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-floating mb-3">
+                                <input required type="text" class="form-control rounded-3" id="new_username" name="new_username" placeholder="Akweter5">
+                                <label for="new_username">Username</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input required type="email" class="form-control rounded-3" id="new_email" name="new_email" placeholder="john.doe@domain.com">
+                                <label for="new_email">Email</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input required type="text" class="form-control rounded-3" id="new_fname" name="new_fname" placeholder="Sena">
+                                <label for="new_fname">First Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input required type="text" class="form-control rounded-3" id="email" name="new_lname" placeholder="Doe">
+                                <label for="new_lname">Last Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input required type="tel" name="new_phone" class="form-control rounded-3" id="new_phone" placeholder="0549544632">
+                                <label for="new_phone">Telephone</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input required type="text" name="new_city" class="form-control rounded-3" id="new_city" placeholder="Tamale">
+                                <label for="new_city">City</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input required type="text" name="new_town" class="form-control rounded-3" id="new_town" placeholder="Tamale">
+                                <label for="new_city">Town</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input required type="text" name="new_region" class="form-control rounded-3" id="new_region" placeholder="Northen Region">
+                                <label for="new_region">Region</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input required type="text" name="new_country" class="form-control rounded-3" id="new_country" placeholder="Ghana">
+                                <label for="new_city">Country</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input required type="text" name="new_gps" class="form-control rounded-3" id="new_gps" placeholder="A30W7">
+                                <label for="new_gps">Zip Code</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <label for="avatar"></label>
+                                <input type="file" name="avatar" class="form-control form-control-lg" id="avatar">
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input required type="password" name="new_pass" class="form-control rounded-3" id="new_pass" placeholder="Strong Password">
+                                <label for="new_pass">Password</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input required type="password" name="pass2" class="form-control rounded-3" id="pass2" placeholder="Confirm Password">
+                                <label for="pass2">Confirm Password</label>
+                            </div>
+                            <div>
+                                <input type="hidden" name="admin_status" value="customer">
+                            </div>
+                        </div>
+                        <hr>
+                        <div>
+                            <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" name="add_new_customer_btn" type="submit" >Add New Customer</button>
+                            <small class="text-muted">By clicking Sign up, you agree to our <a href="#">terms</a> and <a href="#">conditions</a></small>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -259,8 +413,7 @@
             </div>
         </div>
 
-        
-        <!-- CART MODAL -->
+        <!-- ADD NEW ADMIN MODAL -->
         <div class="modal fade" id="add_new_admin_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="add_new_admin_modalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -286,19 +439,19 @@
                                     <label for="pass2">Comfirm Password</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <label for="avatar">Profile</label>
+                                    <label for="avatar"></label>
                                     <input type="file" name="avatar" class="form-control form-control-lg" id="avatar">
                                 </div>
                                 <div>
                                     <input type="hidden" name="admin_status" value="admin">
                                 </div>
-                                <div>
-                                    <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" name="Signup" type="submit"></button>
-                                <div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" name="Signup" data-bs-dismiss="modal">Add Admin</button>
-                            <small class="text-muted">By clicking Sign up, you agree to our <a href="#">terms</a> and <a href="#">conditions</a></small>
+                        <div>
+                            <hr>
+                            <div>
+                                <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" data-bs-dismiss="modal" name="Signup" type="submit">Add New Admin</button>
+                                <small class="text-muted">By clicking Sign up, you agree to our <a href="#">terms</a> and <a href="#">conditions</a></small>
+                            <div>
                         </div>
                     </form>
                 </div>
@@ -306,7 +459,5 @@
         </div>
 
         <script src="../../node_modules/bootstrap/bootstrap.min.js"></script>
-        <script src="../../node_modules\fontawesome\js\fontawesome.min.js"></script>
-        <script src="../../node_modules\fontawesome\js\all.min.js"></script>
     </body>
 </html>

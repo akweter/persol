@@ -1,135 +1,153 @@
 <?php
-    // Allow one admin to delete admin
+    error_reporting(E_WARNING || E_NOTICE || E_ERROR);
+    session_start();
+    include_once("../../database/config.php");
+    
+    $admin_signup =  $_SESSION['admin_sign_up'];
+    $admin_login = $_SESSION['admin_login'];
+    $admin_username = $_SESSION['admin_username'];
+    $status = $_SESSION['admin'];
+
+    if (empty($admin_login) || empty($admin_signup)) {
+        header('location: ./auth/login.php');
+    }
+
+    // DELETE CUSTOMER
+    if(isset($_GET['eraseCustomer'])){
+        $delete_customer = $_GET['eraseCustomer'];
+        $Erase = mysqli_query($PDO, "DELETE FROM `customers` WHERE C_id = $delete_customer");
+        header("location: ./");
+    }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
+    <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Supermarket Management Software">
         <meta name="author" content="James Akweter">
         <meta name="generator" content="Angel Dev Team">
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-        <title>New Account</title>
+        <link rel="icon" sizes="180x180" href="../../public/img/wheat.jpg">
+        <link rel="apple-touch-icon" sizes="180x180" href="../../public/img/wheat.jpg">
+        <title>User Details</title>
         <link rel="stylesheet" href="../../node_modules/bootstrap/bootstrap.min.css">
-        <link rel="stylesheet" href="../../node_modules/fontawesome/css/all.min.css">
-        <link rel="stylesheet" href="../../node_modules/fontawesome/css/all.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body>
-        <!-- Header -->
+        <!-- Header admin_username -->
         <header>
-            <div class="px-3 py-2 text-bg-info">
+            <div class="px-3 py-2 bg-info">
                 <div class="container">
                     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                        <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-                            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+                        <a href="../" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><img src="../../public/img/wheat.jpg" width="50" height="50" alt="logo" srcset=""></svg><h1 style="margin-left:50px;">Welcome <?php if (isset($admin_username)) {echo($admin_username);}?> <i class="badge bg-danger"><?php if (isset($status)) {echo($status);} ?></i></h1>
                         </a>
                         <ul class="nav p-3 col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                             <li>
-                                <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle border">
                                 <span data-feather="calendar" class="align-text-bottom"></span>This week
                             </button>
                             </li>
                             <li>
-                                <button type="button" class="btn btn-sm btn-light btn-outline-secondary">Share</button>
+                                <button type="button" class="btn btn-sm btn-light btn-light border">Share</button>
                             </li>
                             <li>
-                                <button type="button" class="btn btn-sm btn-light btn-outline-secondary">Export</button>
+                                <button type="button" class="btn btn-sm btn-light btn-light border">Export</button>
                             </li>
                             <li class="">
-                                <a href="./auth/logout.php"><button type="button" class="btn btn-sm btn-secondary btn-outline-danger">Log Out</button></a>
+                                <a href="../auth/logout.php"><button type="button" class="btn btn-sm btn-danger">Log Out</button></a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="px-3 py-2 border-bottom mb-3">
-                <div class="container d-flex flex-wrap justify-content-center">
-                    <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
-                        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-                    </form>
-
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            
-                            
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
         </header>
 
-        <!-- Main Content -->
-        <main>
-            <h1>main</h1>
+        <nav style="float:right;margin:1% 10% 1% 0 ">
+            <a href="./" class="btn btn-outline-secondary btn-warning ">Go Back</a>
+        </nav>
+
+         <!-- Main Content -->
+        <main class="container mb-5">
+            <?php
+            // DISPLAY CUSTOMER DATA VIA ID
+            if (isset($_GET['customerDetails']) || $_POST['customerDetails']) {
+                $customer_id = $_GET['customerDetails'];
+                $fetch_arrays = mysqli_query($PDO, "SELECT * FROM `customers` WHERE C_id = '$customer_id' ");
+
+                while($Val = mysqli_fetch_array($fetch_arrays)){
+                    $cid = $Val['C_id'];
+                    $c_Fname = $Val['C_fn'];
+                    $c_Lname = $Val['C_ln'];
+                    $c_Email = $Val['email_Add'];
+                    $c_Username = $Val['Username'];
+                    $c_Phone = $Val['Telephone'];
+                    $c_GPS = $Val['C_GPS'];
+                    $c_Country = $Val['C_country'];
+                    $c_City = $Val['C_city'];
+                    $c_Town = $Val['C_town'];
+                    $c_Image = $Val['C_image'];
+                    $c_Region = $Val['P_region'];
+                    $c_Password = $Val['PassWD'];
+                    $c_Status = $Val['Status']; ?>
+
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr class="table-dark"><td><big>CUSTOMER</big></td><td><big>DETAILS</big></td></tr>
+                            <tr><td>Username</td><td><?=$c_Fname?></td></tr>
+                            <tr><td>First Name</td><td><?=$c_Fname?></td></tr>
+                            <tr><td>Last Name</td><td><?=$c_Lname?></td></tr>
+                            <tr><td>Telephone</td><td>0<?=$c_Phone?></td></tr>
+                            <tr><td>Email</td><td><?=$c_Email?></td></tr>
+                            <tr><td>Country</td><td><?=$c_Country?></td></tr>
+                            <tr><td>Region</td><td><?=$c_Region?></td></tr>
+                            <tr><td>City</td><td><?=$c_City?></td></tr>
+                            <tr><td>Town</td><td><?=$c_Town?></td></tr>
+                            <tr><td>Area Code</td><td><?=$c_GPS?></td></tr>
+                            <tr><td>Password</td><td><?=$c_Password?></td></tr>
+                        </tbody>
+                    </table><?php
+                }
+            }
+
+            // DISPLAY ADMIN DATA VIA ID
+            if (isset($_GET['adminDetails']) || $_POST['adminDetails']) {
+                $admin_id = $_GET['adminDetails'];
+                $fetch_arrays = mysqli_query($PDO, "SELECT * FROM `customers` WHERE C_id = '$admin_id' ");
+
+                while($Val = mysqli_fetch_array($fetch_arrays)){
+                    $aid = $Val['Admin_id'];
+                    $a_Email = $Val['email_Add'];
+                    $a_Username = $Val['Username'];
+                    $c_Image = $Val['Logo'];
+                    $c_Password = $Val['PassWD'];
+                    $c_Status = $Val['Status'];?>
+
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr class="table-dark"><td><big>ADMIN</big></td><td><big>DETAILS</big></td></tr>
+                            <tr><td>Username</td><td><?=$a_Username?></td></tr>
+                            <tr><td>Email</td><td><?=$a_Email?></td></tr>
+                            <tr><td>Avatar</td><td><img src="<?=$c_Image?>" alt="<?=$a_Username?>"></td></tr>
+                        </tbody>
+                    </table><?php
+                }        
+            }
+            ?>
+            <a href="./edit_customer.php?editCustomer=<?php if(isset($customer_id)){echo($cid);} if(isset($admin_id)){echo($aid);}?>" class="btn btn-outline-light btn-primary">Edit <?php if(isset($customer_id)){echo($c_Fname. " ". $c_Lname);} if(isset($admin_id)){echo($a_Username);}?></a>
         </main>
 
-    <!-- Footer -->
-        <div class="container">
-            <footer class="py-5">
-                <div class="row">
-                <div class="col-6 col-md-2 mb-3">
-                    <h5>Section</h5>
-                    <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-6 col-md-2 mb-3">
-                    <h5>Section</h5>
-                    <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-6 col-md-2 mb-3">
-                    <h5>Section</h5>
-                    <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-md-5 offset-md-1 mb-3">
-                    <form>
-                    <h5>Subscribe to our newsletter</h5>
-                    <p>Monthly digest of what's new and exciting from us.</p>
-                    <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                        <label for="newsletter1" class="visually-hidden">Email address</label>
-                        <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
-                        <button class="btn btn-info" type="button">Subscribe</button>
-                    </div>
-                    </form>
-                </div>
-                </div>
-
+        <!-- Footer -->
+        <div class="bg-info">
+            <footer class="py-4 container">
                 <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
-                <p>&copy; 2023 Company, Inc. All rights reserved.</p>
-                <ul class="list-unstyled d-flex">
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-                    <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
-                </ul>
+                    <p>&copy; <?php echo(date("Y")); ?> Angel Dev Team. All rights reserved.</p>
                 </div>
             </footer>
         </div>
 
         <script src="../../node_modules/bootstrap/bootstrap.min.js"></script>
-        <script src="../../node_modules\fontawesome\js\fontawesome.min.js"></script>
-        <script src="../../node_modules\fontawesome\js\all.min.js"></script>
     </body>
 </html>
